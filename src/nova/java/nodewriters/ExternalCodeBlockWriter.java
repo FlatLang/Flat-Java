@@ -9,6 +9,6 @@ public abstract class ExternalCodeBlockWriter extends NodeWriter
 	@Override
 	public StringBuilder write(StringBuilder builder)
 	{
-		return builder.append(node().joinContents(x -> getWriter(x).writeExpression().toString())).append('\n');
+		return builder.append(node().joinContents((x, expression) -> (expression ? getWriter(x).writeExpression() : getWriter(x).write()).toString())).append('\n');
 	}
 }

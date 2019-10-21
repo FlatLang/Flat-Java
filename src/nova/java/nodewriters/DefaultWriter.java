@@ -9,7 +9,7 @@ public abstract class DefaultWriter extends MatchCaseWriter
 	@Override
 	public StringBuilder write(StringBuilder builder)
 	{
-		if (node().getParentSwitch().isConventionalSwitch())
+		if (node().getParentMatch().isConventionalSwitch())
 		{
 			builder.append("default:\n");
 			

@@ -47,6 +47,13 @@ public abstract class ScopeWriter extends NodeWriter
 			getWriter(child).write(builder);
 		});
 		
+		NovaMethodDeclaration method = node().getParentMethod();
+		
+		if (method instanceof InitializationMethod)
+		{
+			builder.append("return this;\n");
+		}
+		
 		if (braces)
 		{
 			builder.append('}');

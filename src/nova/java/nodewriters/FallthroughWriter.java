@@ -10,7 +10,7 @@ public abstract class FallthroughWriter extends MatchChildWriter
 	@Override
 	public StringBuilder write(StringBuilder builder)
 	{
-		Variable fall = node().getParentSwitch().getLocalFallthrough();
+		Variable fall = node().getParentMatch().getLocalFallthrough();
 		
 		if (fall != null)
 		{

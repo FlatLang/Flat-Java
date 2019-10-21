@@ -1,6 +1,7 @@
 package nova.java.nodewriters;
 
-import net.fathomsoft.nova.tree.*;
+import net.fathomsoft.nova.tree.ClassDeclaration;
+import net.fathomsoft.nova.tree.Value;
 
 public abstract class ValueWriter extends NodeWriter
 {
@@ -93,7 +94,13 @@ public abstract class ValueWriter extends NodeWriter
 		}
 		else
 		{
-			getWriter(node().getTypeClass()).writeName(builder);
+			ClassDeclaration c = node().getTypeClass();
+			
+			if (c == null) {
+				builder.append("BLOOP");
+			} else {
+				getWriter(node().getTypeClass()).writeName(builder);
+			}
 		}
 		
 		writeArrayDimensions(builder);

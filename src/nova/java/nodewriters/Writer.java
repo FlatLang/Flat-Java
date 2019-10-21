@@ -475,28 +475,6 @@ public class Writer
 				}
 			};
 		}
-		else if (node instanceof InterfaceVTable)
-		{
-			return new InterfaceVTableWriter()
-			{
-				@Override
-				public InterfaceVTable node()
-				{
-					return (InterfaceVTable)node;
-				}
-			};
-		}
-		else if (node instanceof Interface)
-		{
-			return new InterfaceWriter()
-			{
-				@Override
-				public Interface node()
-				{
-					return (Interface)node;
-				}
-			};
-		}
 		else if (node instanceof ClassDeclaration)
 		{
 			return new ClassDeclarationWriter()
@@ -1287,16 +1265,6 @@ public class Writer
 	public static InstantiationWriter getWriter(final Instantiation node)
 	{
 		return (InstantiationWriter)getWriter((Node)node);
-	}
-	
-	public static InterfaceVTableWriter getWriter(final InterfaceVTable node)
-	{
-		return (InterfaceVTableWriter)getWriter((Node)node);
-	}
-	
-	public static InterfaceWriter getWriter(final Interface node)
-	{
-		return (InterfaceWriter)getWriter((Node)node);
 	}
 	
 	public static IValueWriter getWriter(final IValue node)

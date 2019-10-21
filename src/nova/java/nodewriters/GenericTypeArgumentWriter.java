@@ -2,7 +2,7 @@ package nova.java.nodewriters;
 
 import net.fathomsoft.nova.tree.generics.GenericTypeArgument;
 
-public abstract class GenericTypeArgumentWriter extends IValueWriter
+public abstract class GenericTypeArgumentWriter extends IIdentifierWriter
 {
     public abstract GenericTypeArgument node();
 

@@ -1,6 +1,6 @@
 package nova.java.nodewriters;
 
-import net.fathomsoft.nova.tree.*;
+import net.fathomsoft.nova.tree.Identifier;
 
 public abstract class IdentifierWriter extends ValueWriter implements AccessibleWriter
 {

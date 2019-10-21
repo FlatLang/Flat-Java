@@ -1,6 +1,7 @@
 package nova.java.nodewriters;
 
-import net.fathomsoft.nova.tree.*;
+import net.fathomsoft.nova.tree.Accessible;
+import net.fathomsoft.nova.tree.Value;
 
 import static nova.java.nodewriters.Writer.getWriter;
 

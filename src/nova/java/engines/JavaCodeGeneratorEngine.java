@@ -4,9 +4,11 @@ import net.fathomsoft.nova.CodeGeneratorEngine;
 import net.fathomsoft.nova.Nova;
 import net.fathomsoft.nova.error.SyntaxMessage;
 import net.fathomsoft.nova.tree.*;
+import nova.java.nodewriters.FileDeclarationWriter;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 
 import static net.fathomsoft.nova.Nova.*;
 import static nova.java.nodewriters.Writer.getWriter;
@@ -21,8 +23,7 @@ public class JavaCodeGeneratorEngine extends CodeGeneratorEngine
 	}
 	
 	/**
-	 * Generate the C Source and Header output from the data contained
-	 * within the syntax tree.
+	 * Generate the Java from the data contained within the syntax tree.
 	 */
 	public void generateOutput()
 	{
@@ -95,7 +96,17 @@ public class JavaCodeGeneratorEngine extends CodeGeneratorEngine
 	
 	public void writeFiles()
 	{
-		
+//		Arrays.stream(tree.getFiles()).forEach(file -> {
+//			File outputDir = getOutputDirectory(file);
+//			
+//			new File(outputDir, file.getPackage().getLocation()).mkdirs();
+//			
+//			FileDeclarationWriter writer = getWriter(file);
+//			
+//			System.out.println(file.getFile().getAbsolutePath());
+//			
+//			//System.out.println(writer.write());
+//		});
 	}
 	
 	/**

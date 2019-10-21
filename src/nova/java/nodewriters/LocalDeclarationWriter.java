@@ -1,6 +1,6 @@
 package nova.java.nodewriters;
 
-import net.fathomsoft.nova.tree.*;
+import net.fathomsoft.nova.tree.LocalDeclaration;
 
 public abstract class LocalDeclarationWriter extends VariableDeclarationWriter
 {
