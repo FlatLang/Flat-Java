@@ -11,4 +11,14 @@ public abstract class MethodDeclarationWriter extends InstanceDeclarationWriter
 	{
 		return builder;
 	}
+
+	@Override
+	public StringBuilder writeName(StringBuilder builder) {
+		switch (node().getName()) {
+			case "toString":
+				return super.writeName(builder.append("nova_"));
+			default:
+				return super.writeName(builder);
+		}
+	}
 }

@@ -21,4 +21,14 @@ public abstract class VariableDeclarationWriter extends IIdentifierWriter
 	{
 		return writeType(builder).append(writeName());
 	}
+
+	@Override
+	public StringBuilder writeName(StringBuilder builder) {
+		switch (node().getName()) {
+			case "class":
+				return super.writeName(builder.append("nova_"));
+			default:
+				return super.writeName(builder);
+		}
+	}
 }
