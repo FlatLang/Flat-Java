@@ -46,8 +46,9 @@ public abstract class ClassDeclarationWriter extends InstanceDeclarationWriter
 		
 		return builder;
 	}
-	
-	public StringBuilder writeType(StringBuilder builder, boolean space, boolean convertPrimitive)
+
+	@Override
+	public StringBuilder writeType(StringBuilder builder, boolean space, boolean convertPrimitive, boolean boxPrimitive)
 	{
 		return builder.append("class").append(space ? ' ' : "");
 	}

@@ -49,10 +49,10 @@ public abstract class ValueWriter extends NodeWriter
 	
 	public final StringBuilder writeType(StringBuilder builder, boolean space)
 	{
-		return writeType(builder, space, true);
+		return writeType(builder, space, true, false);
 	}
 	
-	public StringBuilder writeType(StringBuilder builder, boolean space, boolean convertPrimitive)
+	public StringBuilder writeType(StringBuilder builder, boolean space, boolean convertPrimitive, boolean boxPrimitive)
 	{
 		if (node().getType() == null)
 		{
@@ -60,32 +60,61 @@ public abstract class ValueWriter extends NodeWriter
 		}
 		else if (convertPrimitive && node().isPrimitiveType())
 		{
-			switch (node().getType())
-			{
-				case "Byte":
-					builder.append("byte");
-					break;
-				case "Char":
-					builder.append("char");
-					break;
-				case "Short":
-					builder.append("short");
-					break;
-				case "Int":
-					builder.append("int");
-					break;
-				case "Long":
-					builder.append("long");
-					break;
-				case "Float":
-					builder.append("float");
-					break;
-				case "Double":
-					builder.append("double");
-					break;
-				case "Bool":
-					builder.append("boolean");
-					break;
+			if (boxPrimitive) {
+				switch (node().getType())
+				{
+					case "Byte":
+						builder.append("Byte");
+						break;
+					case "Char":
+						builder.append("Char");
+						break;
+					case "Short":
+						builder.append("Short");
+						break;
+					case "Int":
+						builder.append("Integer");
+						break;
+					case "Long":
+						builder.append("Long");
+						break;
+					case "Float":
+						builder.append("Float");
+						break;
+					case "Double":
+						builder.append("Double");
+						break;
+					case "Bool":
+						builder.append("Boolean");
+						break;
+				}
+			} else {
+				switch (node().getType()) {
+					case "Byte":
+						builder.append("byte");
+						break;
+					case "Char":
+						builder.append("char");
+						break;
+					case "Short":
+						builder.append("short");
+						break;
+					case "Int":
+						builder.append("int");
+						break;
+					case "Long":
+						builder.append("long");
+						break;
+					case "Float":
+						builder.append("float");
+						break;
+					case "Double":
+						builder.append("double");
+						break;
+					case "Bool":
+						builder.append("boolean");
+						break;
+				}
 			}
 		}
 		else if (node().isExternalType())

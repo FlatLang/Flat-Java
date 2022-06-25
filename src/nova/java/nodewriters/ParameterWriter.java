@@ -36,7 +36,7 @@ public abstract class ParameterWriter extends LocalDeclarationWriter
 	
 	public StringBuilder writeOptionalType(StringBuilder builder)
 	{
-		return builder.append("Optional<").append(super.writeType(new StringBuilder(), false, false)).append("> ");
+		return builder.append("Optional<").append(super.writeType(new StringBuilder(), false, true, true)).append("> ");
 	}
 	
 	public StringBuilder writeOptionalName()

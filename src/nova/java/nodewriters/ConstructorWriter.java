@@ -7,7 +7,7 @@ public abstract class ConstructorWriter extends BodyMethodDeclarationWriter
 	public abstract Constructor node();
 	
 	@Override
-	public StringBuilder writeType(StringBuilder builder, boolean space, boolean convertPrimitive)
+	public StringBuilder writeType(StringBuilder builder, boolean space, boolean convertPrimitive, boolean boxPrimitive)
 	{
 		return builder;
 	}
