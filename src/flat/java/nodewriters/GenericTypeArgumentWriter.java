@@ -13,6 +13,6 @@ public abstract class GenericTypeArgumentWriter extends IIdentifierWriter
             return builder.append(node().getName());
         }
 
-        return writeType(builder);
+        return writeType(builder, false, false, true);
     }
 }
