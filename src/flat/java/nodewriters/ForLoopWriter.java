@@ -15,6 +15,7 @@ public abstract class ForLoopWriter extends LoopWriter
 		
 		if (initialization != null)
 		{
+			getWriter(initialization).writeType(builder, true);
 			getWriter(initialization).write(builder);
 		}
 		
