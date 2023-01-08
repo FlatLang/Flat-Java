@@ -34,12 +34,12 @@ public abstract class ParameterListWriter extends TypeListWriter
 
 			if (!names && box && param instanceof Value && ((Value) param).isPrimitive()) {
 				switch (((Value) param).getType()) {
-					case "Byte": builder.append("Byte"); break;
-					case "Short": builder.append("Short"); break;
-					case "Int": builder.append("Integer"); break;
-					case "Long": builder.append("Long"); break;
-					case "Char": builder.append("Character"); break;
-					case "Bool": builder.append("Boolean"); break;
+					case "Byte": builder.append("java.lang.Byte"); break;
+					case "Short": builder.append("java.lang.Short"); break;
+					case "Int": builder.append("java.lang.Integer"); break;
+					case "Long": builder.append("java.lang.Long"); break;
+					case "Char": builder.append("java.lang.Character"); break;
+					case "Bool": builder.append("java.lang.Boolean"); break;
 					default: builder.append("???");
 				}
 			} else if (!names && param instanceof Parameter) {
