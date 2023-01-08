@@ -3,6 +3,7 @@ package flat.java.nodewriters;
 import flat.tree.ClassDeclaration;
 import flat.tree.FlatMethodDeclaration;
 import flat.tree.Value;
+import flat.tree.generics.GenericTypeArgumentList;
 import flat.tree.generics.GenericTypeParameter;
 
 public abstract class ValueWriter extends NodeWriter
@@ -88,6 +89,20 @@ public abstract class ValueWriter extends NodeWriter
 			} else {
 				getWriter(node().getTypeClass()).writeName(builder);
 			}
+		}
+
+		GenericTypeArgumentList args = node().getGenericTypeArgumentList();
+
+		if (args != null && args.getNumVisibleChildren() > 0) {
+			builder.append("<");
+
+			for (int i = 0; i < args.getNumVisibleChildren(); i++) {
+				if (i > 0) builder.append(", ");
+
+				getWriter(args.getVisibleChild(i)).writeExpression(builder);
+			}
+
+			builder.append(">");
 		}
 
 		writeArrayDimensions(builder);
