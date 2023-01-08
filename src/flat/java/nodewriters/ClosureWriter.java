@@ -8,8 +8,26 @@ public abstract class ClosureWriter extends VariableWriter
 
 	@Override
 	public StringBuilder writeExpression(StringBuilder builder) {
-		getWriter(node().getParentClass()).writeName(builder).append("::");
+		FlatMethodDeclaration method = node().getMethodDeclaration();
 
-		return super.writeExpression(builder);
+		builder.append("(");
+
+		FlatParameterList params = method.getParameterList();
+
+		if (params.getNumVisibleChildren() > 0) {
+			for (int i = 0; i < params.getNumVisibleChildren(); i++) {
+				if (i > 0) builder.append(", ");
+
+				getWriter(params.getVisibleChild(i)).writeName(builder);
+			}
+		}
+
+		builder.append(") -> ");
+
+		return getWriter(method.getScope()).write(builder);
+
+//		getWriter(node().getParentClass()).writeName(builder).append("::");
+//
+//		return super.writeExpression(builder);
 	}
 }

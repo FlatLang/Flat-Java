@@ -29,7 +29,7 @@ public abstract class ClosureDeclarationWriter extends ParameterWriter
 					builder.append(", ");
 				}
 
-				builder.append(node().isPrimitive() ? node().getTypeClass().getName() : node().getType());
+				super.writeType(builder, space, convertPrimitive, true);
 			}
 
 			builder.append(">");
