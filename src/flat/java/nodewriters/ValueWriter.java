@@ -123,7 +123,7 @@ public abstract class ValueWriter extends NodeWriter
 					builder.append("java.lang.Byte");
 					break;
 				case "Char":
-					builder.append("java.lang.Char");
+					builder.append("java.lang.Character");
 					break;
 				case "Short":
 					builder.append("java.lang.Short");
