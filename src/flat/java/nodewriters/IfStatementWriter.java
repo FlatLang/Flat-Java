@@ -17,8 +17,6 @@ public abstract class IfStatementWriter extends ControlStatementWriter
 	{
 		writeExpression(builder).append(' ');
 		
-		getWriter(node().getScope()).write(builder, true, false);
-		
-		return builder.append(' ');
+		return getWriter(node().getScope()).write(builder, true, false);
 	}
 }

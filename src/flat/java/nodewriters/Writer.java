@@ -1317,6 +1317,11 @@ public class Writer
 	{
 		return (IValueWriter)getWriter((Node)node);
 	}
+
+	public static GenericTypeParameterWriter getWriter(final GenericTypeParameter node)
+	{
+		return (GenericTypeParameterWriter)getWriter((Node)node);
+	}
 	
 	public static LambdaMethodDeclarationWriter getWriter(final LambdaMethodDeclaration node)
 	{

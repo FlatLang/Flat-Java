@@ -1,6 +1,12 @@
 package flat.java.nodewriters;
 
 import flat.tree.*;
+import flat.tree.generics.GenericTypeArgument;
+import flat.tree.generics.GenericTypeArgumentList;
+import flat.tree.generics.GenericTypeParameterList;
+
+import java.util.Arrays;
+import java.util.Optional;
 
 public abstract class ClassDeclarationWriter extends InstanceDeclarationWriter
 {
@@ -23,27 +29,66 @@ public abstract class ClassDeclarationWriter extends InstanceDeclarationWriter
 	@Override
 	public StringBuilder writeSignature(StringBuilder builder)
 	{
-		super.writeSignature(builder);
+		writeVisibility(builder);
+		writeStatic(builder);
+		builder.append("class ");
+		writeName(builder);
+		writeGenericTypeParametersDeclaration(builder);
 		
-		if (node().doesExtendClass())
-		{
+		if (node().doesExtendClass()) {
 			builder.append(" extends ").append(getWriter(node().getExtendedClassDeclaration()).writeName());
 		}
-		if (node().getImplementedClassNames().length > 0)
-		{
+		if (node().getImplementedClassNames().length > 0) {
 			builder.append(" implements ");
 			
-			for (int i = 0; i < node().getImplementedClassNames().length; i++)
-			{
-				if (i > 0)
-				{
-					builder.append(", ");
-				}
+			for (int i = 0; i < node().getImplementedClassNames().length; i++) {
+				if (i > 0) builder.append(", ");
+
+				String name = node().getImplementedClassNames()[i];
 				
-				builder.append(node().getImplementedClassNames()[i]);
+				builder.append(name);
+
+				TraitImplementation imp = node().getInterfacesImplementationList().getChildStream()
+					.map(t -> (TraitImplementation)t)
+					.filter(c -> c.getType().equals(name))
+					.findFirst().get();
+
+				GenericTypeArgumentList args = imp.getGenericTypeArgumentList();
+
+				if (args.getNumVisibleChildren() > 0) {
+					builder.append("<");
+
+					for (int n = 0; n < args.getNumVisibleChildren(); n++) {
+						if (n > 0) builder.append(", ");
+
+						GenericTypeArgument arg = args.getVisibleChild(n);
+
+						getWriter(arg).writeExpression(builder);
+					}
+
+					builder.append(">");
+				}
 			}
 		}
 		
+		return builder;
+	}
+
+	public StringBuilder writeGenericTypeParametersDeclaration(StringBuilder builder) {
+		GenericTypeParameterList params = node().getGenericTypeParameterDeclaration();
+
+		if (params.getNumVisibleChildren() > 0) {
+			builder.append("<");
+
+			for (int i = 0; i < params.getNumVisibleChildren(); i++) {
+				if (i > 0) builder.append(", ");
+
+				getWriter(params.getVisibleChild(i)).writeExpression(builder);
+			}
+
+			builder.append(">");
+		}
+
 		return builder;
 	}
 

@@ -9,6 +9,10 @@ public abstract class GenericTypeArgumentWriter extends IIdentifierWriter
     @Override
     public StringBuilder writeExpression(StringBuilder builder)
     {
-        return builder.append(node().isPrimitive() ? node().getTypeClass().getName() : node().getType());
+        if (node().isGenericType()) {
+            return builder.append(node().getName());
+        }
+
+        return writeType(builder);
     }
 }

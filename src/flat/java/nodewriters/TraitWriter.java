@@ -16,7 +16,8 @@ public abstract class TraitWriter extends ClassDeclarationWriter
 	public StringBuilder writeSignature(StringBuilder builder) {
 		writeVisibility(builder).append(writeStatic());
 
-		return writeType(builder).append(writeName());
+		writeType(builder).append(writeName());
+		return writeGenericTypeParametersDeclaration(builder);
 	}
 
 	@Override
