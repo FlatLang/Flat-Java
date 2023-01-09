@@ -9,6 +9,11 @@ public abstract class ArrayWriter extends VariableDeclarationWriter
 	@Override
 	public StringBuilder writeUseExpression(StringBuilder builder)
 	{
+		if (node().isGenericType()) {
+			getWriter(node().getGenericTypeParameter()).writeDefaultType(builder);
+			return writeArrayDimensions(builder);
+		}
+
 		return writeType(builder, false);
 	}
 
@@ -16,9 +21,7 @@ public abstract class ArrayWriter extends VariableDeclarationWriter
 	public StringBuilder writeExpression(StringBuilder builder) {
 		builder.append("new ");
 
-		writeUseExpression(builder);
-
-		return builder;
+		return writeUseExpression(builder);
 	}
 
 	@Override
