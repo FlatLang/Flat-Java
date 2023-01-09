@@ -16,10 +16,14 @@ public abstract class FileDeclarationWriter extends NodeWriter
 		builder.append("import java.util.Optional;\n");
 		builder.append("import flat.FlatUtilities;\n");
 		getWriter(node().getImportList()).write(builder).append('\n');
-		
-		Arrays.stream(node().getClassDeclarations()).forEach(clazz -> {
-			getWriter(clazz).write(builder);
-		});
+
+		ClassDeclaration fileClass = node().getFileClassDeclaration();
+
+		getWriter(fileClass).write(builder);
+
+		Arrays.stream(node().getClassDeclarations())
+			.filter(clazz -> clazz != fileClass && clazz.encapsulatingClass == null)
+			.forEach(clazz -> getWriter(clazz).write(builder));
 		
 		return builder;
 	}

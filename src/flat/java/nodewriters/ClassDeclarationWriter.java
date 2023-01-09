@@ -22,6 +22,10 @@ public abstract class ClassDeclarationWriter extends InstanceDeclarationWriter
 		getWriter(node().getConstructorList()).write(builder);
 		getWriter(node().getPropertyMethodList()).write(builder);
 		getWriter(node().getMethodList()).write(builder);
+
+		Arrays.stream(node().getEncapsulatedClasses())
+			.map(Writer::getWriter)
+			.forEach(w -> w.write(builder).append('\n'));
 		
 		return builder.append("}\n");
 	}
