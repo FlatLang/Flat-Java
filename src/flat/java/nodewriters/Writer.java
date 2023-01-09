@@ -1167,6 +1167,11 @@ public class Writer
 	{
 		return (ClassDeclarationWriter)getWriter((Node)node);
 	}
+
+	public static TraitWriter getWriter(final Trait node)
+	{
+		return (TraitWriter)getWriter((Node)node);
+	}
 	
 	public static ClosureContextDeclarationWriter getWriter(final ClosureContextDeclaration node)
 	{
