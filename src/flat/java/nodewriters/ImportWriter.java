@@ -12,6 +12,9 @@ public abstract class ImportWriter extends NodeWriter
 		if (node().isExternal()) {
 			return builder;
 		}
+		if (!node().isPackageImport() && node().getClassDeclaration() == null) {
+			return builder;
+		}
 		if (!node().isPackageImport() && node().getClassDeclaration().getFileDeclaration() == node().getFileDeclaration()) {
 			return builder;
 		}
