@@ -1,6 +1,7 @@
 package flat.java.nodewriters;
 
 import flat.tree.*;
+import flat.tree.variables.Variable;
 
 public abstract class DefaultParameterInitializationWriter extends NodeWriter
 {
@@ -13,8 +14,12 @@ public abstract class DefaultParameterInitializationWriter extends NodeWriter
 		
 		String optionalName = getWriter(param).writeOptionalName().toString();
 		
-		return getWriter(param).writeType(builder).append(param.getName()).append(" = ").append(optionalName).append(" == null ? ")
-			.append(getWriter(param.getDefaultValue()).writeExpression()).append(" : ")
-			.append(optionalName).append(".get()");
+		getWriter(param).writeType(builder).append(param.getName()).append(" = ").append(optionalName).append(" == null ? ");
+
+		if (param.getDefaultValue() instanceof Variable && ((Variable)param.getDefaultValue()).getName().equals(param.getName())) {
+			builder.append("this.");
+		}
+
+		return getWriter(param.getDefaultValue()).writeExpression(builder).append(" : ").append(optionalName).append(".get()");
 	}
 }
