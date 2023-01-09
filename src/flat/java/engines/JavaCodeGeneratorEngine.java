@@ -25,7 +25,8 @@ public class JavaCodeGeneratorEngine extends CodeGeneratorEngine
 		"    <properties>\n" +
 		"        <maven.compiler.source>1.8</maven.compiler.source>\n" +
 		"        <maven.compiler.target>1.8</maven.compiler.target>\n" +
-		"        <src.dir>src</src.dir>\n" +
+		"        <src.dir>src/main</src.dir>\n" +
+		"        <test.src.dir>src/test</test.src.dir>\n" +
 		"    </properties>\n" +
 		"\n" +
 		"    <groupId>flat</groupId>\n" +
@@ -34,6 +35,7 @@ public class JavaCodeGeneratorEngine extends CodeGeneratorEngine
 		"\n" +
 		"    <build>\n" +
 		"        <sourceDirectory>${src.dir}</sourceDirectory>\n" +
+		"        <testSourceDirectory>${test.src.dir}</testSourceDirectory>\n" +
 		"        <plugins>\n" +
 		"            <plugin>\n" +
 		"                <artifactId>maven-assembly-plugin</artifactId>\n" +
@@ -84,7 +86,8 @@ public class JavaCodeGeneratorEngine extends CodeGeneratorEngine
 			throw new RuntimeException(e);
 		}
 
-		new File(controller.outputDirectory, "src/flat").mkdirs();
+		new File(controller.outputDirectory, "src/main/flat").mkdirs();
+		new File(controller.outputDirectory, "src/test/flat").mkdirs();
 
 		writePom();
 		writeFlatUtilities();
@@ -93,6 +96,12 @@ public class JavaCodeGeneratorEngine extends CodeGeneratorEngine
 			try
 			{
 				File outputDir = new File(getOutputDirectory(file), "src");
+
+				if (isTestFile(file.file)) {
+					outputDir = new File(outputDir, "test");
+				} else {
+					outputDir = new File(outputDir, "main");
+				}
 
 				File packageFile = new File(outputDir, file.getPackage().getLocation());
 				packageFile.mkdirs();
@@ -104,6 +113,10 @@ public class JavaCodeGeneratorEngine extends CodeGeneratorEngine
 				e.printStackTrace();
 			}
 		});
+	}
+
+	private static boolean isTestFile(File file) {
+		return file.getName().contains("_Test");
 	}
 
 	private void writePom() {
@@ -189,7 +202,7 @@ public class JavaCodeGeneratorEngine extends CodeGeneratorEngine
 
 		try
 		{
-			writeFile("FlatUtilities.java", new File(controller.outputDirectory, "src/flat"), builder.toString());
+			writeFile("FlatUtilities.java", new File(controller.outputDirectory, "src/main/flat"), builder.toString());
 		}
 		catch (IOException e)
 		{
