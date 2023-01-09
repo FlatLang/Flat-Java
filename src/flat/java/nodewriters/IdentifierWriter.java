@@ -1,5 +1,6 @@
 package flat.java.nodewriters;
 
+import flat.tree.Closure;
 import flat.tree.Identifier;
 
 public abstract class IdentifierWriter extends ValueWriter implements AccessibleWriter {
@@ -7,6 +8,10 @@ public abstract class IdentifierWriter extends ValueWriter implements Accessible
 
     @Override
     public StringBuilder writeExpression(StringBuilder builder) {
+        if (node() != node().getReturnedNode() && node().getReturnedNode() instanceof Closure && !node().isAccessed()) {
+            getWriter((Closure)node().getReturnedNode()).writeLambdaParams(builder);
+        }
+
         writeUseExpression(builder);
         writeAccessedExpression(builder);
 
