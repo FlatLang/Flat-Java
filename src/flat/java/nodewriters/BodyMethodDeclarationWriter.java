@@ -26,8 +26,9 @@ public abstract class BodyMethodDeclarationWriter extends FlatMethodDeclarationW
 		writeGenericTypeParameters(builder);
 		writeType(builder);
 		writeName(builder);
-
-		return getWriter(node().getParameterList()).write(builder);
+		writeParameters(builder);
+		
+		return builder;
 	}
 
 	private StringBuilder writeGenericTypeParameters(StringBuilder builder) {
