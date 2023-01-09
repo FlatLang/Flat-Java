@@ -103,7 +103,8 @@ public abstract class ClassDeclarationWriter extends InstanceDeclarationWriter
 	{
 		for (String c : new String[]{"flat/Object", "flat/String", "flat/io/Console", "flat/datastruct/list/Array",
 			"flat/time/Date", "flat/math/Math", "flat/datastruct/Node", "flat/primitive/number/Int", "flat/primitive/number/Double",
-			"flat/primitive/number/Byte", "flat/primitive/number/Short", "flat/primitive/number/Long", "flat/primitive/number/Float"}) {
+			"flat/primitive/number/Byte", "flat/primitive/number/Short", "flat/primitive/number/Long", "flat/primitive/number/Float",
+			"flat/meta/Class"}) {
 			if (node().getClassLocation().equals(c)) {
 				return builder.append("Flat").append(node().getName());
 			}
