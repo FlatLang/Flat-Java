@@ -1322,6 +1322,11 @@ public class Writer
 	{
 		return (GenericTypeParameterWriter)getWriter((Node)node);
 	}
+
+	public static GenericTypeArgumentWriter getWriter(final GenericTypeArgument node)
+	{
+		return (GenericTypeArgumentWriter)getWriter((Node)node);
+	}
 	
 	public static LambdaMethodDeclarationWriter getWriter(final LambdaMethodDeclaration node)
 	{
