@@ -9,8 +9,10 @@ public abstract class ImportWriter extends NodeWriter
 	@Override
 	public StringBuilder write(StringBuilder builder)
 	{
-		if (node().isExternal())
-		{
+		if (node().isExternal()) {
+			return builder;
+		}
+		if (!node().isPackageImport() && node().getClassDeclaration().getFileDeclaration() == node().getFileDeclaration()) {
 			return builder;
 		}
 		
@@ -20,11 +22,25 @@ public abstract class ImportWriter extends NodeWriter
 	@Override
 	public StringBuilder writeExpression(StringBuilder builder)
 	{
-		String path = String.join(".", node().location.substring(0, Math.max(0, node().location.lastIndexOf('/'))).split("[/]"));
-		
-		path += path.length() == 0 ? "" : '.';
-		path += getWriter(node().getClassDeclaration()).writeName();
-		
-		return builder.append("import ").append(path);
+		builder.append("import ");
+
+		if (node().isPackageImport()) {
+			return builder.append(node().location.replace('/', '.')).append(".*");
+		}
+
+		writePathPrefix(builder);
+
+		return getWriter(node().getClassDeclaration()).writeName(builder);
+	}
+
+	private StringBuilder writePathPrefix(StringBuilder builder) {
+		String components = String.join(".", node().location.substring(0, Math.max(0, node().location.lastIndexOf('/'))).split("[/]"));
+		builder.append(components);
+
+		if (components.length() > 0) {
+			builder.append('.');
+		}
+
+		return builder;
 	}
 }
