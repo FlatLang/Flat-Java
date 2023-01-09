@@ -10,6 +10,6 @@ public abstract class TryWriter extends ExceptionHandlerWriter
 	@Override
 	public StringBuilder write(StringBuilder builder)
 	{
-		return builder.append("try\n").append(getWriter(node().getScope()).write());
+		return builder.append("try ").append(getWriter(node().getScope()).write(true, false)).append(" ");
 	}
 }

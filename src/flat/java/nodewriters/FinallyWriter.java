@@ -9,6 +9,6 @@ public abstract class FinallyWriter extends ExceptionHandlerWriter
 	@Override
 	public StringBuilder write(StringBuilder builder)
 	{
-		return builder.append("finally\n").append(getWriter(node().getScope()).write());
+		return builder.append("finally ").append(getWriter(node().getScope()).write());
 	}
 }

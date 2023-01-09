@@ -1,6 +1,8 @@
 package flat.java.nodewriters;
 
 import flat.tree.*;
+import flat.tree.exceptionhandling.Catch;
+import flat.tree.exceptionhandling.Finally;
 
 public abstract class ScopeWriter extends NodeWriter
 {
@@ -44,7 +46,8 @@ public abstract class ScopeWriter extends NodeWriter
 		}
 
 		boolean[] wasIf = new boolean[]{false};
-		
+		boolean[] wasCatch = new boolean[]{false};
+
 		node().forEachChild(child -> {
 			if (wasIf[0]) {
 				if (child instanceof ElseStatement == false) {
@@ -52,9 +55,16 @@ public abstract class ScopeWriter extends NodeWriter
 				} else {
 					builder.append(" ");
 				}
+			} else if (wasCatch[0]) {
+				if (child instanceof Catch || child instanceof Finally) {
+					builder.append(" ");
+				} else {
+					builder.append("\n");
+				}
 			}
 			getWriter(child).write(builder);
 			wasIf[0] = child instanceof IfStatement;
+			wasCatch[0] = !wasIf[0] && child instanceof Catch;
 		});
 
 		if (wasIf[0]) {
