@@ -16,7 +16,20 @@ import static flat.java.nodewriters.Writer.getWriter;
 
 public class JavaCodeGeneratorEngine extends CodeGeneratorEngine
 {
-	private static String POM_XML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
+	private static final String MAVEN_COMPILER_PLUGIN =
+		"            <plugin>\n" +
+		"                <groupId>org.apache.maven.plugins</groupId>\n" +
+		"                <artifactId>maven-compiler-plugin</artifactId>\n" +
+		"                <version>3.10.1</version>\n" +
+		"                <configuration>\n" +
+		"                    <showWarnings>true</showWarnings>\n" +
+		"                    <compilerArguments>\n" +
+		"                        <Xmaxerrs>10000</Xmaxerrs>\n" +
+		"                    </compilerArguments>\n" +
+		"                </configuration>\n" +
+		"            </plugin>\n";
+
+	private static final String POM_XML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
 		"<project xmlns=\"http://maven.apache.org/POM/4.0.0\"\n" +
 		"         xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n" +
 		"         xsi:schemaLocation=\"http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd\">\n" +
@@ -36,7 +49,7 @@ public class JavaCodeGeneratorEngine extends CodeGeneratorEngine
 		"    <build>\n" +
 		"        <sourceDirectory>${src.dir}</sourceDirectory>\n" +
 		"        <testSourceDirectory>${test.src.dir}</testSourceDirectory>\n" +
-		"        <plugins>\n" +
+		"        <plugins>\n{{MAVEN_COMPILER_PLUGIN}}" +
 		"            <plugin>\n" +
 		"                <artifactId>maven-assembly-plugin</artifactId>\n" +
 		"                <configuration>\n" +
@@ -121,7 +134,9 @@ public class JavaCodeGeneratorEngine extends CodeGeneratorEngine
 
 	private void writePom() {
 		try {
-			writeFile("pom.xml", controller.outputDirectory, POM_XML);
+			String xml = POM_XML.replace("{{MAVEN_COMPILER_PLUGIN}}", MAVEN_COMPILER_PLUGIN);
+
+			writeFile("pom.xml", controller.outputDirectory, xml);
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
