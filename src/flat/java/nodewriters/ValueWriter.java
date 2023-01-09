@@ -91,6 +91,18 @@ public abstract class ValueWriter extends NodeWriter
 			}
 		}
 
+		writeGenericArguments(builder);
+		writeArrayDimensions(builder);
+		
+		if (space)
+		{
+			builder.append(' ');
+		}
+		
+		return builder;
+	}
+
+	public StringBuilder writeGenericArguments(StringBuilder builder) {
 		GenericTypeArgumentList args = node().getGenericTypeArgumentList();
 
 		if (args != null && args.getNumVisibleChildren() > 0) {
@@ -105,13 +117,6 @@ public abstract class ValueWriter extends NodeWriter
 			builder.append(">");
 		}
 
-		writeArrayDimensions(builder);
-		
-		if (space)
-		{
-			builder.append(' ');
-		}
-		
 		return builder;
 	}
 
