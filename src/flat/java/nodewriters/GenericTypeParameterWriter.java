@@ -12,12 +12,14 @@ public abstract class GenericTypeParameterWriter extends ValueWriter
 	public StringBuilder writeExpression(StringBuilder builder) {
 		builder.append(node().getName()).append(" extends ");
 
+		return writeDefaultType(builder);
+	}
+
+	public StringBuilder writeDefaultType(StringBuilder builder) {
 		if (node().getDefaultType() != null && !node().getDefaultType().equals("Object")) {
-			builder.append(node().getDefaultType());
-		} else {
-			builder.append("FlatObject");
+			return builder.append(node().getDefaultType());
 		}
 
-		return builder;
+		return builder.append("FlatObject");
 	}
 }
