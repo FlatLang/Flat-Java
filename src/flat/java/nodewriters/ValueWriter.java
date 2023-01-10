@@ -61,7 +61,7 @@ public abstract class ValueWriter extends NodeWriter
 			if (node().isPrimitiveType()) {
 				writePrimitiveType(builder, boxPrimitive);
 			} else {
-				builder.append(node().getType());
+				writeNativeType(builder);
 			}
 		} else if (node().isGenericType()) {
 			builder.append(node().getGenericTypeParameter().getName());
@@ -72,23 +72,7 @@ public abstract class ValueWriter extends NodeWriter
 		} else if (node().isExternalType()) {
 			builder.append(node().getType());
 		} else {
-			ClassDeclaration c = node().getTypeClass();
-			
-			if (c == null) {
-				if (node() instanceof FlatMethodDeclaration) {
-					GenericTypeParameter param = ((FlatMethodDeclaration)node()).getMethodGenericTypeParameterDeclaration().getParameter(node().getType());
-
-					if (param != null) {
-						builder.append(param.getDefaultType());
-					} else {
-						builder.append("BLOOP");
-					}
-				} else {
-					builder.append("BLOOP");
-				}
-			} else {
-				getWriter(node().getTypeClass()).writeName(builder);
-			}
+			writeTypeClassName(builder);
 		}
 
 		writeGenericArguments(builder);
@@ -100,6 +84,36 @@ public abstract class ValueWriter extends NodeWriter
 		}
 		
 		return builder;
+	}
+
+	private StringBuilder writeTypeClassName(StringBuilder builder) {
+		ClassDeclaration c = node().getTypeClass();
+
+		if (c == null) {
+			if (node() instanceof FlatMethodDeclaration) {
+				GenericTypeParameter param = ((FlatMethodDeclaration)node()).getMethodGenericTypeParameterDeclaration().getParameter(node().getType());
+
+				if (param != null) {
+					builder.append(param.getDefaultType());
+				} else {
+					builder.append("BLOOP");
+				}
+			} else {
+				builder.append("BLOOP");
+			}
+		} else {
+			getWriter(node().getTypeClass()).writeName(builder);
+		}
+
+		return builder;
+	}
+
+	private StringBuilder writeNativeType(StringBuilder builder) {
+		if (!node().isPrimitiveArray()) {
+			return builder.append(node().getType());
+		}
+
+		return writeTypeClassName(builder);
 	}
 
 	public StringBuilder writeGenericArguments(StringBuilder builder) {
