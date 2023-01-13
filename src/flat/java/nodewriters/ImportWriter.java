@@ -31,12 +31,6 @@ public abstract class ImportWriter extends NodeWriter
 			return builder.append(node().location.replace('/', '.')).append(".*");
 		}
 
-		writePathPrefix(builder);
-
-		return getWriter(node().getClassDeclaration()).writeName(builder);
-	}
-
-	private StringBuilder writePathPrefix(StringBuilder builder) {
 		String components = String.join(".", node().location.substring(0, Math.max(0, node().location.lastIndexOf('/'))).split("[/]"));
 		builder.append(components);
 
@@ -44,6 +38,6 @@ public abstract class ImportWriter extends NodeWriter
 			builder.append('.');
 		}
 
-		return builder;
+		return getWriter(node().getClassDeclaration()).writeName(builder);
 	}
 }
