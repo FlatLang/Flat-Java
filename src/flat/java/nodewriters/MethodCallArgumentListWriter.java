@@ -28,19 +28,23 @@ public abstract class MethodCallArgumentListWriter extends ArgumentListWriter
 			}
 			
 			boolean optional = method instanceof FlatMethodDeclaration && ((FlatMethodDeclaration)method).getParameterList().getParameter(i).isOptional();
+
+			boolean propagateOptional = optional && node().getParentMethod() instanceof Constructor && method instanceof InitializationMethod;
 			
 			if (i < values.length)
 			{
-				if (optional)
-				{
-					builder.append("Optional.ofNullable(");
-				}
-				
-				getWriter(values[i]).writeExpression(builder);
-				
-				if (optional)
-				{
-					builder.append(')');
+				if (propagateOptional) {
+					getWriter((Identifier) values[i]).writeOptionalName(builder);
+				} else {
+					if (optional) {
+						builder.append("Optional.ofNullable(");
+					}
+
+					getWriter(values[i]).writeExpression(builder);
+
+					if (optional) {
+						builder.append(')');
+					}
 				}
 			}
 			else
