@@ -112,6 +112,9 @@ public abstract class ValueWriter extends NodeWriter
 		if (!node().isPrimitiveArray()) {
 			return builder.append(node().getType());
 		}
+		if (node().isGenericType()) {
+			return builder.append(node().getGenericTypeParameter().getName());
+		}
 
 		return writeTypeClassName(builder);
 	}
