@@ -38,6 +38,19 @@ public abstract class ImportWriter extends NodeWriter
 			builder.append('.');
 		}
 
-		return getWriter(node().getClassDeclaration()).writeName(builder);
+		ClassDeclaration c = node().getClassDeclaration();
+		ClassDeclaration encapsulating = c.encapsulatingClass;
+
+		StringBuilder prefix = new StringBuilder();
+
+		while (encapsulating != null) {
+			prefix.insert(0, getWriter(encapsulating).writeName().append("."));
+
+			encapsulating = encapsulating.encapsulatingClass;
+		}
+
+		builder.append(prefix);
+
+		return getWriter(c).writeName(builder);
 	}
 }
