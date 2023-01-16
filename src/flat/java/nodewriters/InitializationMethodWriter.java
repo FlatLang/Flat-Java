@@ -9,6 +9,10 @@ public abstract class InitializationMethodWriter extends BodyMethodDeclarationWr
 	@Override
 	public StringBuilder writeName(StringBuilder builder)
 	{
-		return builder.append("init");
+		builder.append("init_");
+
+		getWriter(node().getParentClass()).writeName(builder);
+
+		return builder;
 	}
 }
