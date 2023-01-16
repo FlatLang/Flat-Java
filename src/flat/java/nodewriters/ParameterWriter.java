@@ -40,14 +40,4 @@ public abstract class ParameterWriter extends LocalDeclarationWriter
 		super.writeType(builder, false, true, true);
 		return builder.append("> ");
 	}
-	
-	public StringBuilder writeOptionalName()
-	{
-		return writeOptionalName(new StringBuilder());
-	}
-	
-	public StringBuilder writeOptionalName(StringBuilder builder)
-	{
-		return writeName(builder).append("_optional");
-	}
 }

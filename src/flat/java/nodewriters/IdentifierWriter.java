@@ -40,4 +40,15 @@ public abstract class IdentifierWriter extends ValueWriter implements Accessible
             default: return builder.append(node().getName());
         }
     }
+
+    public StringBuilder writeOptionalName()
+    {
+        return writeOptionalName(new StringBuilder());
+    }
+
+    public StringBuilder writeOptionalName(StringBuilder builder)
+    {
+        return writeName(builder).append("_optional");
+    }
+
 }
