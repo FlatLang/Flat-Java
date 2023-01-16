@@ -14,11 +14,11 @@ public abstract class MethodDeclarationWriter extends InstanceDeclarationWriter
 
 	@Override
 	public StringBuilder writeName(StringBuilder builder) {
-		switch (node().getName()) {
-			case "toString":
-				return super.writeName(builder.append("flat_"));
-			default:
-				return super.writeName(builder);
+		if (node().getName().equals("toString") && node().getParameterList().getNumVisibleChildren() == 0) {
+			builder.append("flat_");
+			return super.writeName(builder);
 		}
+
+		return super.writeName(builder);
 	}
 }
