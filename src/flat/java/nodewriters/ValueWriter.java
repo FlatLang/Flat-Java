@@ -66,6 +66,23 @@ public abstract class ValueWriter extends NodeWriter
 
 	public StringBuilder writeType(StringBuilder builder, boolean space, boolean convertPrimitive, boolean boxPrimitive, Value context)
 	{
+		writeTypeName(builder, convertPrimitive, boxPrimitive, context);
+		writeGenericArguments(builder, context);
+		writeArrayDimensions(builder);
+		
+		if (space)
+		{
+			builder.append(' ');
+		}
+		
+		return builder;
+	}
+
+	public StringBuilder writeTypeName(StringBuilder builder) {
+		return writeTypeName(builder, true, node().isPrimitiveType() && node().isPrimitive(), null);
+	}
+
+	public StringBuilder writeTypeName(StringBuilder builder, boolean convertPrimitive, boolean boxPrimitive, Value context) {
 		if (node().isNative()) {
 			if (node().isPrimitiveType()) {
 				writePrimitiveType(builder, convertPrimitive, boxPrimitive);
@@ -84,14 +101,6 @@ public abstract class ValueWriter extends NodeWriter
 			writeTypeClassName(builder);
 		}
 
-		writeGenericArguments(builder, context);
-		writeArrayDimensions(builder);
-		
-		if (space)
-		{
-			builder.append(' ');
-		}
-		
 		return builder;
 	}
 

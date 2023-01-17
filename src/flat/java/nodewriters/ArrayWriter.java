@@ -14,7 +14,10 @@ public abstract class ArrayWriter extends VariableDeclarationWriter
 			return writeArrayDimensions(builder);
 		}
 
-		return writeType(builder, false);
+		writeTypeName(builder);
+		writeArrayDimensions(builder);
+
+		return builder;
 	}
 
 	@Override
