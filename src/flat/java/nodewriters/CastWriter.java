@@ -9,7 +9,9 @@ public abstract class CastWriter extends IValueWriter
 	@Override
 	public StringBuilder writeExpression(StringBuilder builder)
 	{
-		builder.append('(').append(writeType(false)).append(')');
+		builder.append('(');
+		writeType(builder, false, !node().isPointer());
+		builder.append(')');
 		
 		return getWriter(node().getValueNode()).writeExpression(builder);
 	}

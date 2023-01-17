@@ -53,9 +53,13 @@ public abstract class ValueWriter extends NodeWriter
 	
 	public final StringBuilder writeType(StringBuilder builder, boolean space)
 	{
-		return writeType(builder, space, true, false);
+		return writeType(builder, space, true);
 	}
 	
+	public final StringBuilder writeType(StringBuilder builder, boolean space, boolean convertPrimitive) {
+		return writeType(builder, space, convertPrimitive, node().isPrimitiveType() && node().isPointer());
+	}
+
 	public final StringBuilder writeType(StringBuilder builder, boolean space, boolean convertPrimitive, boolean boxPrimitive) {
 		return writeType(builder, space, convertPrimitive, boxPrimitive, null);
 	}
@@ -64,7 +68,7 @@ public abstract class ValueWriter extends NodeWriter
 	{
 		if (node().isNative()) {
 			if (node().isPrimitiveType()) {
-				writePrimitiveType(builder, boxPrimitive);
+				writePrimitiveType(builder, convertPrimitive, boxPrimitive);
 			} else {
 				writeNativeType(builder);
 			}
@@ -73,7 +77,7 @@ public abstract class ValueWriter extends NodeWriter
 		} else if (node().getType() == null) {
 			builder.append("void");
 		} else if (convertPrimitive && node().isPrimitiveType()) {
-			writePrimitiveType(builder, boxPrimitive);
+			writePrimitiveType(builder, convertPrimitive, boxPrimitive);
 		} else if (node().isExternalType()) {
 			builder.append(node().getType());
 		} else {
@@ -168,8 +172,10 @@ public abstract class ValueWriter extends NodeWriter
 		return builder;
 	}
 
-	private StringBuilder writePrimitiveType(StringBuilder builder, boolean boxPrimitive) {
+	private StringBuilder writePrimitiveType(StringBuilder builder, boolean convertPrimitive, boolean boxPrimitive) {
 		if (boxPrimitive) {
+			if (!convertPrimitive) return builder.append(node().getType());
+
 			switch (node().getType())
 			{
 				case "Byte":
