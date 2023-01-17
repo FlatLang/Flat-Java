@@ -47,19 +47,28 @@ public abstract class ClassDeclarationWriter extends InstanceDeclarationWriter
 		if (node().doesExtendClass()) {
 			builder.append(" extends ").append(getWriter(node().getExtendedClassDeclaration()).writeName());
 		}
-		if (node().getImplementedClassNames().length > 0) {
-			builder.append(" implements ");
-			
-			for (int i = 0; i < node().getImplementedClassNames().length; i++) {
+
+		writeInterfaceExtensions(builder, "implements");
+		
+		return builder;
+	}
+
+	public StringBuilder writeInterfaceExtensions(StringBuilder builder, String keyword) {
+		Trait[] traits = node().getImplementedInterfaces(false);
+
+		if (traits.length > 0) {
+			builder.append(" ").append(keyword).append(" ");
+
+			for (int i = 0; i < traits.length; i++) {
 				if (i > 0) builder.append(", ");
 
-				String implementedName = node().getImplementedClassNames()[i];
-				
-				builder.append(implementedName);
+				getWriter(traits[i]).writeName(builder);
+
+				final int index = i;
 
 				TraitImplementation imp = node().getInterfacesImplementationList().getChildStream()
 					.map(t -> (TraitImplementation)t)
-					.filter(c -> c.getType().equals(implementedName))
+					.filter(c -> c.getType().equals(traits[index].getName()))
 					.findFirst().get();
 
 				GenericTypeArgumentList args = imp.getGenericTypeArgumentList();
@@ -79,7 +88,7 @@ public abstract class ClassDeclarationWriter extends InstanceDeclarationWriter
 				}
 			}
 		}
-		
+
 		return builder;
 	}
 

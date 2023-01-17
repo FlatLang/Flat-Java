@@ -20,7 +20,9 @@ public abstract class TraitWriter extends ClassDeclarationWriter
 		writeType(builder);
 		writeName(builder, name);
 
-		return writeGenericTypeParametersDeclaration(builder);
+		writeGenericTypeParametersDeclaration(builder);
+
+		return writeInterfaceExtensions(builder, "extends");
 	}
 
 	@Override
