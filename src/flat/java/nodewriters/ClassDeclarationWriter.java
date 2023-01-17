@@ -31,12 +31,17 @@ public abstract class ClassDeclarationWriter extends InstanceDeclarationWriter
 	}
 	
 	@Override
-	public StringBuilder writeSignature(StringBuilder builder)
+	public StringBuilder writeSignature(StringBuilder builder, Value context, String name)
 	{
 		writeVisibility(builder);
 		writeStatic(builder);
+
+		if (node().isAbstract()) {
+			builder.append("abstract ");
+		}
+
 		builder.append("class ");
-		writeName(builder);
+		writeName(builder, name);
 		writeGenericTypeParametersDeclaration(builder);
 		
 		if (node().doesExtendClass()) {
@@ -48,13 +53,13 @@ public abstract class ClassDeclarationWriter extends InstanceDeclarationWriter
 			for (int i = 0; i < node().getImplementedClassNames().length; i++) {
 				if (i > 0) builder.append(", ");
 
-				String name = node().getImplementedClassNames()[i];
+				String implementedName = node().getImplementedClassNames()[i];
 				
-				builder.append(name);
+				builder.append(implementedName);
 
 				TraitImplementation imp = node().getInterfacesImplementationList().getChildStream()
 					.map(t -> (TraitImplementation)t)
-					.filter(c -> c.getType().equals(name))
+					.filter(c -> c.getType().equals(implementedName))
 					.findFirst().get();
 
 				GenericTypeArgumentList args = imp.getGenericTypeArgumentList();
@@ -97,23 +102,26 @@ public abstract class ClassDeclarationWriter extends InstanceDeclarationWriter
 	}
 
 	@Override
-	public StringBuilder writeType(StringBuilder builder, boolean space, boolean convertPrimitive, boolean boxPrimitive)
+	public StringBuilder writeType(StringBuilder builder, boolean space, boolean convertPrimitive, boolean boxPrimitive, Value context)
 	{
 		return builder.append("class").append(space ? ' ' : "");
 	}
 	
 	@Override
-	public StringBuilder writeName(StringBuilder builder)
+	public StringBuilder writeName(StringBuilder builder, String name)
 	{
+		name = name != null ? name : node().getName();
+
 		for (String c : new String[]{"flat/Object", "flat/String", "flat/io/Console", "flat/datastruct/list/Array",
 			"flat/time/Date", "flat/math/Math", "flat/datastruct/Node", "flat/primitive/number/Int", "flat/primitive/number/Double",
 			"flat/primitive/number/Byte", "flat/primitive/number/Short", "flat/primitive/number/Long", "flat/primitive/number/Float",
 			"flat/meta/Class"}) {
 			if (node().getClassLocation().equals(c)) {
-				return builder.append("Flat").append(node().getName());
+				builder.append("Flat");
+				break;
 			}
 		}
 		
-		return super.writeName(builder);
+		return super.writeName(builder, name);
 	}
 }

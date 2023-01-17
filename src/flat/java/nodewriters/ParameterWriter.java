@@ -13,20 +13,30 @@ public abstract class ParameterWriter extends LocalDeclarationWriter
 	}
 	
 	@Override
-	public StringBuilder writeExpression(StringBuilder builder)
+	public final StringBuilder writeExpression(StringBuilder builder)
 	{
-		return writeSignature(builder);
+		return writeExpression(builder, null);
 	}
-	
-	@Override
-	public StringBuilder writeSignature(StringBuilder builder)
+
+	public final StringBuilder writeExpression(StringBuilder builder, Value context)
+	{
+		return writeExpression(builder, context, null);
+	}
+
+	public StringBuilder writeExpression(StringBuilder builder, Value context, String name)
+	{
+		return writeSignature(builder, context, name);
+	}
+
+	public StringBuilder writeSignature(StringBuilder builder, Value context, String name)
 	{
 		if (node().isOptional())
 		{
-			return writeOptionalType(builder).append(writeOptionalName());
+			writeOptionalType(builder, context);
+			return writeOptionalName(builder, name);
 		}
 		
-		return super.writeSignature(builder);
+		return super.writeSignature(builder, context, name);
 	}
 	
 	public StringBuilder writeOptionalType()
@@ -34,10 +44,13 @@ public abstract class ParameterWriter extends LocalDeclarationWriter
 		return writeOptionalType(new StringBuilder());
 	}
 	
-	public StringBuilder writeOptionalType(StringBuilder builder)
-	{
+	public StringBuilder writeOptionalType(StringBuilder builder) {
+		return writeOptionalType(builder, null);
+	}
+
+	public StringBuilder writeOptionalType(StringBuilder builder, Value context) {
 		builder.append("Optional<");
-		super.writeType(builder, false, true, true);
+		super.writeType(builder, false, true, true, context);
 		return builder.append("> ");
 	}
 }

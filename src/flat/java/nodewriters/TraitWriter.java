@@ -1,22 +1,25 @@
 package flat.java.nodewriters;
 
 import flat.tree.Trait;
+import flat.tree.Value;
 
 public abstract class TraitWriter extends ClassDeclarationWriter
 {
 	public abstract Trait node();
 
 	@Override
-	public StringBuilder writeType(StringBuilder builder, boolean space, boolean convertPrimitive, boolean boxPrimitive)
+	public StringBuilder writeType(StringBuilder builder, boolean space, boolean convertPrimitive, boolean boxPrimitive, Value context)
 	{
 		return builder.append("interface").append(space ? ' ' : "");
 	}
 
 	@Override
-	public StringBuilder writeSignature(StringBuilder builder) {
+	public StringBuilder writeSignature(StringBuilder builder, Value context, String name) {
 		writeVisibility(builder).append(writeStatic());
 
-		writeType(builder).append(writeName());
+		writeType(builder);
+		writeName(builder, name);
+
 		return writeGenericTypeParametersDeclaration(builder);
 	}
 

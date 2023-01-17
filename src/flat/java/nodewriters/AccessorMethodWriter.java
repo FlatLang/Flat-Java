@@ -7,10 +7,10 @@ public abstract class AccessorMethodWriter extends PropertyMethodWriter
 	public abstract AccessorMethod node();
 	
 	@Override
-	public StringBuilder writeName(StringBuilder builder)
+	public StringBuilder writeName(StringBuilder builder, String name)
 	{
 		builder.append("accessor_");
 		
-		return super.writeName(builder);
+		return super.writeName(builder, name);
 	}
 }

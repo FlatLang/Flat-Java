@@ -3,6 +3,7 @@ package flat.java.nodewriters;
 import flat.tree.ClassDeclaration;
 import flat.tree.FlatMethodDeclaration;
 import flat.tree.Value;
+import flat.tree.generics.GenericTypeArgument;
 import flat.tree.generics.GenericTypeArgumentList;
 import flat.tree.generics.GenericTypeParameter;
 
@@ -55,7 +56,11 @@ public abstract class ValueWriter extends NodeWriter
 		return writeType(builder, space, true, false);
 	}
 	
-	public StringBuilder writeType(StringBuilder builder, boolean space, boolean convertPrimitive, boolean boxPrimitive)
+	public final StringBuilder writeType(StringBuilder builder, boolean space, boolean convertPrimitive, boolean boxPrimitive) {
+		return writeType(builder, space, convertPrimitive, boxPrimitive, null);
+	}
+
+	public StringBuilder writeType(StringBuilder builder, boolean space, boolean convertPrimitive, boolean boxPrimitive, Value context)
 	{
 		if (node().isNative()) {
 			if (node().isPrimitiveType()) {
@@ -64,7 +69,7 @@ public abstract class ValueWriter extends NodeWriter
 				writeNativeType(builder);
 			}
 		} else if (node().isGenericType()) {
-			builder.append(node().getGenericTypeParameter().getName());
+			writeGenericType(builder, context);
 		} else if (node().getType() == null) {
 			builder.append("void");
 		} else if (convertPrimitive && node().isPrimitiveType()) {
@@ -75,7 +80,7 @@ public abstract class ValueWriter extends NodeWriter
 			writeTypeClassName(builder);
 		}
 
-		writeGenericArguments(builder);
+		writeGenericArguments(builder, context);
 		writeArrayDimensions(builder);
 		
 		if (space)
@@ -84,6 +89,28 @@ public abstract class ValueWriter extends NodeWriter
 		}
 		
 		return builder;
+	}
+
+	public StringBuilder writeGenericType(StringBuilder builder, Value context) {
+		GenericTypeParameter param = node().getGenericTypeParameter();
+		String name = param.getName();
+
+		if (context != null) {
+//			builder.append("/*original...: ").append(name).append(", and new: ");
+
+			GenericTypeArgument arg = param.getCorrespondingArgument(context);
+
+			if (arg != null) {
+//				builder.append(arg.getName());
+				name = getWriter(arg).writeType(new StringBuilder(), false, true, false, null).toString();
+			} else {
+//				builder.append("null");
+			}
+
+//			builder.append("*/");
+		}
+
+		return builder.append(name);
 	}
 
 	private StringBuilder writeTypeClassName(StringBuilder builder) {
@@ -120,6 +147,10 @@ public abstract class ValueWriter extends NodeWriter
 	}
 
 	public StringBuilder writeGenericArguments(StringBuilder builder) {
+		return writeGenericArguments(builder, null);
+	}
+
+	public StringBuilder writeGenericArguments(StringBuilder builder, Value context) {
 		GenericTypeArgumentList args = node().getGenericTypeArgumentList();
 
 		if (args != null && args.getNumVisibleChildren() > 0) {
@@ -128,7 +159,7 @@ public abstract class ValueWriter extends NodeWriter
 			for (int i = 0; i < args.getNumVisibleChildren(); i++) {
 				if (i > 0) builder.append(", ");
 
-				getWriter(args.getVisibleChild(i)).writeExpression(builder);
+				getWriter(args.getVisibleChild(i)).writeExpression(builder, context);
 			}
 
 			builder.append(">");

@@ -6,7 +6,7 @@ public abstract class NodeWriter extends Writer
 {
 	public abstract Node node();
 	
-	public StringBuilder write()
+	public final StringBuilder write()
 	{
 		return write(new StringBuilder());
 	}
@@ -16,7 +16,7 @@ public abstract class NodeWriter extends Writer
 		return writeExpression(builder).append(";\n");
 	}
 	
-	public StringBuilder writeExpression()
+	public final StringBuilder writeExpression()
 	{
 		return writeExpression(new StringBuilder());
 	}

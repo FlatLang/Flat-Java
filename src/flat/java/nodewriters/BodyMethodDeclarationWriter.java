@@ -5,15 +5,15 @@ import flat.tree.*;
 public abstract class BodyMethodDeclarationWriter extends FlatMethodDeclarationWriter
 {
 	public abstract BodyMethodDeclaration node();
-	
+
 	@Override
 	public StringBuilder write(StringBuilder builder)
 	{
 		return writeSignature(builder).append(' ').append(getWriter(node().getScope()).write());
 	}
-	
+
 	@Override
-	public StringBuilder writeSignature(StringBuilder builder)
+	public StringBuilder writeSignature(StringBuilder builder, Value context, String name)
 	{
 		if (node().getParentClass() instanceof Trait) {
 			if (!node().isStatic()) {
@@ -24,26 +24,10 @@ public abstract class BodyMethodDeclarationWriter extends FlatMethodDeclarationW
 		}
 		writeStatic(builder);
 		writeGenericTypeParameters(builder);
-		writeType(builder);
-		writeName(builder);
-		writeParameters(builder);
-		
+		writeType(builder, true, true, false, null);
+		writeName(builder, name);
+		writeParameters(builder, context);
+
 		return builder;
-	}
-
-	private StringBuilder writeGenericTypeParameters(StringBuilder builder) {
-		if (node().getMethodGenericTypeParameterDeclaration().getNumVisibleChildren() == 0) return builder;
-
-		builder.append("<");
-
-		final int[] i = new int[]{0};
-
-		node().getMethodGenericTypeParameterDeclaration().forEachVisibleChild(param -> {
-			if (i[0]++ > 0) builder.append(", ");
-
-			getWriter(param).writeExpression(builder);
-		});
-
-		return builder.append("> ");
 	}
 }

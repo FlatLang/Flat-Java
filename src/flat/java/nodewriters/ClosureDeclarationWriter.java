@@ -7,7 +7,7 @@ public abstract class ClosureDeclarationWriter extends ParameterWriter
 	public abstract ClosureDeclaration node();
 
 	@Override
-	public StringBuilder writeType(StringBuilder builder, boolean space, boolean convertPrimitive, boolean boxPrimitive) {
+	public StringBuilder writeType(StringBuilder builder, boolean space, boolean convertPrimitive, boolean boxPrimitive, Value context) {
 		if (node().getType() == null)
 		{
 			builder.append("FlatUtilities.Consumer");
@@ -22,14 +22,14 @@ public abstract class ClosureDeclarationWriter extends ParameterWriter
 		if (node().getParameterList().getNumVisibleChildren() > 0) {
 			builder.append("<");
 
-			getWriter(node().getParameterList()).write(builder, false, false, true);
+			getWriter(node().getParameterList()).write(builder, false, false, true, context);
 
 			if (node().getType() != null) {
 				if (node().getParameterList().getNumParameters() > 0) {
 					builder.append(", ");
 				}
 
-				super.writeType(builder, space, convertPrimitive, true);
+				super.writeType(builder, false, convertPrimitive, true, context);
 			}
 
 			builder.append(">");
@@ -43,20 +43,20 @@ public abstract class ClosureDeclarationWriter extends ParameterWriter
 	}
 
 	@Override
-	public StringBuilder writeExpression(StringBuilder builder)
+	public StringBuilder writeExpression(StringBuilder builder, Value context, String name)
 	{
 		if (node().isOptional()) {
 			builder.append("Optional<");
 		}
 
-		writeType(builder, false);
+		writeType(builder, false, true, false, context);
 
 		if (node().isOptional()) {
 			builder.append("> ");
-			writeOptionalName(builder);
+			writeOptionalName(builder, name);
 		} else {
 			builder.append(" ");
-			getWriter(node()).writeName(builder);
+			getWriter(node()).writeName(builder, name);
 		}
 
 		return builder;

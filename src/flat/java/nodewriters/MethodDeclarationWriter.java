@@ -13,12 +13,13 @@ public abstract class MethodDeclarationWriter extends InstanceDeclarationWriter
 	}
 
 	@Override
-	public StringBuilder writeName(StringBuilder builder) {
-		if (node().getName().equals("toString") && node().getParameterList().getNumVisibleChildren() == 0) {
+	public StringBuilder writeName(StringBuilder builder, String name) {
+		name = name != null ? name : node().getName();
+
+		if (name.equals("toString") && node().getParameterList().getNumVisibleChildren() == 0) {
 			builder.append("flat_");
-			return super.writeName(builder);
 		}
 
-		return super.writeName(builder);
+		return super.writeName(builder, name);
 	}
 }

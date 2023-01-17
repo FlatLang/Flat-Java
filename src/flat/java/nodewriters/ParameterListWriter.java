@@ -8,28 +8,42 @@ public abstract class ParameterListWriter extends TypeListWriter
 	public abstract ParameterList node();
 	
 	@Override
-	public StringBuilder write(StringBuilder builder)
+	public final StringBuilder write(StringBuilder builder)
 	{
 		return write(builder, true);
 	}
 	
-	public StringBuilder write(StringBuilder builder, boolean parenthesis) {
+	public final StringBuilder write(StringBuilder builder, boolean parenthesis) {
 		return write(builder, parenthesis, true, false);
 	}
 
-	public StringBuilder write(StringBuilder builder, boolean parenthesis, boolean names, boolean box)
+	public final StringBuilder write(StringBuilder builder, boolean parenthesis, boolean names, boolean box) {
+		return write(builder, parenthesis, names, box, null);
+	}
+
+	public final StringBuilder write(StringBuilder builder, boolean parenthesis, boolean names, boolean box, Value context) {
+		return write(builder, parenthesis, names, box, context, null);
+	}
+
+	public StringBuilder write(StringBuilder builder, boolean parenthesis, boolean names, boolean box, Value context, String[] parameterNames)
 	{
+		boolean nl = node().getNumVisibleChildren() >= 3;
+		String delimiter = parenthesis && nl ? ",\n" : ", ";
+
 		if (parenthesis)
 		{
 			builder.append('(');
+			if (nl) builder.append('\n');
 		}
 		
 		final int[] i = new int[] { 0 };
 		
 		node().forEachVisibleChild(param -> {
+			String name = names && parameterNames != null ? parameterNames[i[0]] : null;
+
 			if (i[0]++ > 0)
 			{
-				builder.append(", ");
+				builder.append(delimiter);
 			}
 
 			if (!names && box && param instanceof Value && ((Value) param).isPrimitive()) {
@@ -43,7 +57,9 @@ public abstract class ParameterListWriter extends TypeListWriter
 					default: builder.append("???");
 				}
 			} else if (!names && param instanceof Parameter) {
-				getWriter((Parameter) param).writeType(builder, false);
+				getWriter((Parameter) param).writeType(builder, false, true, false, context);
+			} else if (param instanceof Parameter) {
+				getWriter((Parameter) param).writeExpression(builder, context, name);
 			} else {
 				getWriter(param).writeExpression(builder);
 			}
@@ -51,6 +67,7 @@ public abstract class ParameterListWriter extends TypeListWriter
 		
 		if (parenthesis)
 		{
+			if (nl) builder.append('\n');
 			builder.append(')');
 		}
 		

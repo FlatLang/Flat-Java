@@ -7,7 +7,7 @@ public abstract class VirtualMethodDeclarationWriter extends BodyMethodDeclarati
 	public abstract VirtualMethodDeclaration node();
 
 	@Override
-	public StringBuilder writeName(StringBuilder builder) {
-		return getWriter(node().base).writeName(builder);
+	public StringBuilder writeName(StringBuilder builder, String name) {
+		return getWriter(node().base).writeName(builder, name);
 	}
 }

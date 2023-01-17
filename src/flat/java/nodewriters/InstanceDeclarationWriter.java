@@ -46,9 +46,9 @@ public abstract class InstanceDeclarationWriter extends VariableDeclarationWrite
 	}
 
 	@Override
-	public StringBuilder writeSignature(StringBuilder builder) {
+	public StringBuilder writeSignature(StringBuilder builder, Value context, String name) {
 		writeVisibility(builder);
 		writeStatic(builder);
-		return super.writeSignature(builder);
+		return super.writeSignature(builder, context, name);
 	}
 }
