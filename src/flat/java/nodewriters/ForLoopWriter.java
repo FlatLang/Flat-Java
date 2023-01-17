@@ -15,6 +15,7 @@ public abstract class ForLoopWriter extends LoopWriter
 		
 		if (initialization != null)
 		{
+			builder.append("{\n");
 			getWriter(initialization).writeType(builder, true);
 			getWriter(initialization).write(builder);
 		}
@@ -41,6 +42,10 @@ public abstract class ForLoopWriter extends LoopWriter
 				getWriter(child).write(builder);
 			}
 		});
+
+		if (initialization != null) {
+			builder.append("}\n");
+		}
 		
 		return builder;
 	}
