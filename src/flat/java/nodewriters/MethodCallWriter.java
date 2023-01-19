@@ -9,8 +9,11 @@ public abstract class MethodCallWriter extends VariableWriter
 	@Override
 	public StringBuilder writeName(StringBuilder builder, String name)
 	{
-		if (node().getCallableDeclaration() instanceof MethodDeclaration)
-		{
+		if (node().getCallableDeclaration() instanceof FlatMethodDeclaration) {
+			boolean appendStatic = node().isWithinStaticContext() || node().isAccessedWithinStaticContext();
+
+			return getWriter((FlatMethodDeclaration)node().getCallableDeclaration()).writeName(builder, name, appendStatic);
+		} else if (node().getCallableDeclaration() instanceof MethodDeclaration) {
 			return getWriter((MethodDeclaration)node().getCallableDeclaration()).writeName(builder, name);
 		}
 		

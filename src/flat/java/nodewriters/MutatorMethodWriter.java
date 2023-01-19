@@ -7,11 +7,11 @@ public abstract class MutatorMethodWriter extends PropertyMethodWriter
 	public abstract MutatorMethod node();
 	
 	@Override
-	public StringBuilder writeName(StringBuilder builder, String name)
+	public StringBuilder writeName(StringBuilder builder, String name, boolean appendStatic)
 	{
 		builder.append("mutator_");
 		
-		return super.writeName(builder, name);
+		return super.writeName(builder, name, appendStatic);
 	}
 
 	@Override

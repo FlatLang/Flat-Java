@@ -33,11 +33,19 @@ public abstract class FlatMethodDeclarationWriter extends MethodDeclarationWrite
 	}
 
 	@Override
-	public StringBuilder writeName(StringBuilder builder, String name) {
+	public final StringBuilder writeName(StringBuilder builder, String name) {
+		return writeName(builder, name, true);
+	}
+
+	public StringBuilder writeName(StringBuilder builder, String name, boolean appendStatic) {
 		super.writeName(builder, name);
 
 		if (node().isOverloaded()) {
 			builder.append('_').append(node().getOverloadID());
+		}
+
+		if (appendStatic && node().isStatic()) {
+			builder.append("_static");
 		}
 
 		return builder;

@@ -38,6 +38,18 @@ public abstract class ParameterWriter extends LocalDeclarationWriter
 		
 		return super.writeSignature(builder, context, name);
 	}
+
+	public final StringBuilder writeInitialName(StringBuilder builder) {
+		return writeInitialName(builder, null);
+	}
+
+	public StringBuilder writeInitialName(StringBuilder builder, String name) {
+		if (node().isOptional()) {
+			return writeOptionalName(builder, name);
+		}
+
+		return writeName(builder, name);
+	}
 	
 	public StringBuilder writeOptionalType()
 	{

@@ -5,7 +5,12 @@ import flat.tree.*;
 public abstract class ConstructorWriter extends BodyMethodDeclarationWriter
 {
 	public abstract Constructor node();
-	
+
+	@Override
+	public StringBuilder writeStaticMethodInstanceOverload(StringBuilder builder) {
+		return builder;
+	}
+
 	@Override
 	public StringBuilder writeType(StringBuilder builder, boolean space, boolean convertPrimitive, boolean boxPrimitive, Value context)
 	{
@@ -19,7 +24,7 @@ public abstract class ConstructorWriter extends BodyMethodDeclarationWriter
 	}
 	
 	@Override
-	public StringBuilder writeName(StringBuilder builder, String name)
+	public StringBuilder writeName(StringBuilder builder, String name, boolean appendStatic)
 	{
 		return getWriter(node().getParentClass()).writeName(builder, name);
 	}

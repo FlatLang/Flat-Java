@@ -983,6 +983,17 @@ public class Writer
 				}
 			};
 		}
+		else if (node instanceof AnonymousCompilerMethod)
+		{
+			return new AnonymousCompilerMethodWriter()
+			{
+				@Override
+				public AnonymousCompilerMethod node()
+				{
+					return (AnonymousCompilerMethod)node;
+				}
+			};
+		}
 		else if (node instanceof BodyMethodDeclaration)
 		{
 			return new BodyMethodDeclarationWriter()
@@ -1143,6 +1154,11 @@ public class Writer
 		return (BinaryOperationWriter)getWriter((Node)node);
 	}
 	
+	public static AnonymousCompilerMethodWriter getWriter(final AnonymousCompilerMethod node)
+	{
+		return (AnonymousCompilerMethodWriter)getWriter((Node)node);
+	}
+
 	public static BodyMethodDeclarationWriter getWriter(final BodyMethodDeclaration node)
 	{
 		return (BodyMethodDeclarationWriter)getWriter((Node)node);
