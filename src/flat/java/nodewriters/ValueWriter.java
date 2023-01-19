@@ -6,6 +6,7 @@ import flat.tree.Value;
 import flat.tree.generics.GenericTypeArgument;
 import flat.tree.generics.GenericTypeArgumentList;
 import flat.tree.generics.GenericTypeParameter;
+import flat.tree.generics.GenericTypeParameterList;
 
 public abstract class ValueWriter extends NodeWriter
 {
@@ -166,16 +167,38 @@ public abstract class ValueWriter extends NodeWriter
 	public StringBuilder writeGenericArguments(StringBuilder builder, Value context) {
 		GenericTypeArgumentList args = node().getGenericTypeArgumentList();
 
+		boolean printCaret = true;
+		int i = 0;
+
 		if (args != null && args.getNumVisibleChildren() > 0) {
+			printCaret = false;
 			builder.append("<");
 
-			for (int i = 0; i < args.getNumVisibleChildren(); i++) {
+			for (; i < args.getNumVisibleChildren(); i++) {
 				if (i > 0) builder.append(", ");
 
 				getWriter(args.getVisibleChild(i)).writeExpression(builder, context);
 			}
 
 			builder.append(">");
+		}
+
+		ClassDeclaration typeClass = node().getTypeClass();
+
+		if (typeClass != null) {
+			GenericTypeParameterList params = typeClass.getGenericTypeParameterDeclaration();
+
+			if (params != null && params.getNumVisibleChildren() > 0) {
+				if (printCaret) builder.append("<");
+
+				for (; i < params.getNumVisibleChildren(); i++) {
+					if (i > 0) builder.append(", ");
+
+					getWriter(params.getVisibleChild(i)).writeDefaultType(builder);
+				}
+
+				if (printCaret) builder.append(">");
+			}
 		}
 
 		return builder;
