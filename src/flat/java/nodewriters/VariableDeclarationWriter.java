@@ -6,13 +6,30 @@ import flat.tree.variables.VariableDeclaration;
 public abstract class VariableDeclarationWriter extends IIdentifierWriter
 {
 	public abstract VariableDeclaration node();
-	
+
 	@Override
-	public StringBuilder writeExpression(StringBuilder builder)
-	{
+	public StringBuilder write(StringBuilder builder) {
+		writeExpression(builder).append(" = ");
+
+		return writeDefaultValue(builder).append(";\n");
+	}
+
+	@Override
+	public StringBuilder writeExpression(StringBuilder builder) {
 		return writeSignature(builder);
 	}
-	
+
+	private StringBuilder writeDefaultValue(StringBuilder builder) {
+		if (node().isPrimitive()) {
+			switch (node().getType()) {
+				case "Bool": return builder.append("false");
+				default: return builder.append("0");
+			}
+		}
+
+		return builder.append("null");
+	}
+
 	public final StringBuilder writeSignature()
 	{
 		return writeSignature(new StringBuilder());
