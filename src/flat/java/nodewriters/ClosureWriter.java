@@ -36,6 +36,17 @@ public abstract class ClosureWriter extends VariableWriter
 		return builder.append(")");
 	}
 
+	@Override
+	public StringBuilder writeName(StringBuilder builder, String name) {
+		FlatMethodDeclaration method = node().getMethodDeclaration();
+
+		if (method != null) {
+			return getWriter(method).writeName(builder, name);
+		}
+
+		return super.writeName(builder, name);
+	}
+
 	public StringBuilder writeLambdaParams(StringBuilder builder) {
 		FlatMethodDeclaration method = node().getMethodDeclaration();
 
