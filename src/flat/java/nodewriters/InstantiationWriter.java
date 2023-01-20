@@ -12,4 +12,9 @@ public abstract class InstantiationWriter extends IIdentifierWriter
 	{
 		return builder.append("new ").append(getWriter(node().getIdentifier()).writeUseExpression());
 	}
+
+	@Override
+	public StringBuilder writeType(StringBuilder builder, boolean space, boolean convertPrimitive, boolean boxPrimitive, Value context) {
+		return super.writeType(builder, space, false, true, context);
+	}
 }
