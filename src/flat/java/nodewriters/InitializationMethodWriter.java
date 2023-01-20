@@ -20,4 +20,9 @@ public abstract class InitializationMethodWriter extends BodyMethodDeclarationWr
 	public StringBuilder writeStaticMethodInstanceOverload(StringBuilder builder) {
 		return builder;
 	}
+
+	@Override
+	public StringBuilder writeType(StringBuilder builder, boolean space, boolean convertPrimitive, boolean boxPrimitive, Value context) {
+		return super.writeType(builder, space, false, true, context);
+	}
 }
