@@ -94,8 +94,8 @@ public abstract class ValueWriter extends NodeWriter
 			writeGenericType(builder, context);
 		} else if (node().getType() == null) {
 			builder.append("void");
-		} else if (convertPrimitive && node().isPrimitiveType()) {
-			writePrimitiveType(builder, convertPrimitive, boxPrimitive);
+		} else if (convertPrimitive && !node().isPointer() && node().isPrimitiveType()) {
+			writePrimitiveType(builder, true, boxPrimitive);
 		} else if (node().isExternalType()) {
 			builder.append(node().getType());
 		} else {
