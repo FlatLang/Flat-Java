@@ -110,18 +110,11 @@ public abstract class ValueWriter extends NodeWriter
 		String name = param.getName();
 
 		if (context != null) {
-//			builder.append("/*original...: ").append(name).append(", and new: ");
-
 			GenericTypeArgument arg = param.getCorrespondingArgument(context);
 
 			if (arg != null) {
-//				builder.append(arg.getName());
-				name = getWriter(arg).writeType(new StringBuilder(), false, true, false, null).toString();
-			} else {
-//				builder.append("null");
+				name = getWriter(arg).writeType(new StringBuilder(), false, false, true, null).toString();
 			}
-
-//			builder.append("*/");
 		}
 
 		return builder.append(name);
