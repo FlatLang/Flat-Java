@@ -972,6 +972,17 @@ public class Writer
 				}
 			};
 		}
+		else if (node instanceof ExtendedClass)
+		{
+			return new ExtendedClassWriter()
+			{
+				@Override
+				public ExtendedClass node()
+				{
+					return (ExtendedClass)node;
+				}
+			};
+		}
 		else if (node instanceof IValue)
 		{
 			return new IValueWriter()
@@ -1334,6 +1345,11 @@ public class Writer
 		return (InstantiationWriter)getWriter((Node)node);
 	}
 	
+	public static ExtendedClassWriter getWriter(final ExtendedClass node)
+	{
+		return (ExtendedClassWriter)getWriter((Node)node);
+	}
+
 	public static IValueWriter getWriter(final IValue node)
 	{
 		return (IValueWriter)getWriter((Node)node);

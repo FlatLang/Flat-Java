@@ -45,7 +45,8 @@ public abstract class ClassDeclarationWriter extends InstanceDeclarationWriter
 		writeGenericTypeParametersDeclaration(builder);
 		
 		if (node().doesExtendClass()) {
-			builder.append(" extends ").append(getWriter(node().getExtendedClassDeclaration()).writeName());
+			builder.append(" extends ");
+			getWriter(node().getExtendedClass()).writeExpression(builder);
 		} else if (node().getClassLocation().equals("flat/exception/Exception")) {
 			builder.append(" extends RuntimeException");
 		}
