@@ -53,7 +53,11 @@ public abstract class FlatMethodDeclarationWriter extends MethodDeclarationWrite
 
 	@Override
 	public StringBuilder writeType(StringBuilder builder, boolean space, boolean convertPrimitive, boolean boxPrimitive, Value context) {
-		if (node().doesOverride() && !node().getOverriddenMethod().isPrimitive()) {
+		if (node().doesOverride()) {
+			if (node().getOverriddenMethod().isPrimitive()) {
+				return getWriter(node().getRootDeclaration()).writeType(builder, space, convertPrimitive, boxPrimitive, context);
+			}
+
 			return super.writeType(builder, space, false, true, context);
 		}
 
