@@ -11,7 +11,12 @@ public abstract class BodyMethodDeclarationWriter extends FlatMethodDeclarationW
 	{
 		writeStaticMethodInstanceOverload(builder);
 
-		return writeSignature(builder).append(' ').append(getWriter(node().getScope()).write());
+		writeSignature(builder).append(' ');
+		return writeBody(builder);
+	}
+
+	public StringBuilder writeBody(StringBuilder builder) {
+		return getWriter(node().getScope()).write(builder);
 	}
 
 	public StringBuilder writeStaticMethodInstanceOverload(StringBuilder builder) {
