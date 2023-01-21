@@ -42,6 +42,8 @@ public abstract class FlatMethodDeclarationWriter extends MethodDeclarationWrite
 
 		if (node().isOverloaded()) {
 			builder.append('_').append(node().getOverloadID());
+		} else if (node().doesOverride() && node().getRootDeclaration().getOverloadID() != -1) {
+			builder.append('_').append(node().getRootDeclaration().getOverloadID());
 		}
 
 		if (appendStatic && node().isStatic()) {
