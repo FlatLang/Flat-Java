@@ -12,6 +12,12 @@ public abstract class IdentifierWriter extends ValueWriter implements Accessible
             getWriter((Closure)node().getReturnedNode()).writeLambdaParams(builder);
         }
 
+        if (node().doesAccess() && node().getAccessedNode().isChainNavigation()) {
+            builder.append("FlatUtilities.chain(");
+            writeUseExpression(builder).append(", _cr -> _cr.");
+            return writeAccessedExpression(builder, false).append(")");
+        }
+
         writeUseExpression(builder);
         writeAccessedExpression(builder);
 

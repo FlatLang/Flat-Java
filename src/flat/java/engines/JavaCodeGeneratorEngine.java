@@ -147,6 +147,18 @@ public class JavaCodeGeneratorEngine extends CodeGeneratorEngine
 		builder.append("package flat;\n\n");
 		builder.append("public class FlatUtilities {\n");
 
+		builder
+			.append("public static <E> E chain(E obj, FlatUtilities.Consumer1<E>... fs) {\n")
+			.append(  "for (FlatUtilities.Consumer1<E> f : fs) {\n")
+			.append(    "f.call(obj);\n")
+			.append(  "}\n\n")
+			.append(  "return obj;\n")
+			.append("}\n\n")
+			.append("public static <E> E chain(E obj, FlatUtilities.Consumer1<E> f) {\n")
+			.append(  "f.call(obj);\n\n")
+			.append(  "return obj;\n")
+			.append("}\n");
+
 		int count = 20;
 
 		for (int i = 0; i < count + 1; i++)
