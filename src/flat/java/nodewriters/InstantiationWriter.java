@@ -10,7 +10,13 @@ public abstract class InstantiationWriter extends IIdentifierWriter
 	@Override
 	public StringBuilder writeUseExpression(StringBuilder builder)
 	{
-		return builder.append("new ").append(getWriter(node().getIdentifier()).writeUseExpression());
+		builder.append("new ");
+
+		if (node().getDeclaringClass().getClassLocation().equals("flat/Object")) {
+			return builder.append("FlatUtilities.BaseObject()");
+		}
+
+		return getWriter(node().getIdentifier()).writeUseExpression(builder);
 	}
 
 	@Override

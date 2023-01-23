@@ -151,6 +151,10 @@ public class JavaCodeGeneratorEngine extends CodeGeneratorEngine
 		builder.append("public class FlatUtilities {\n");
 
 		builder
+			.append("public static class BaseObject implements FlatObject {\n")
+			.append("}\n\n");
+
+		builder
 			.append("public static <E> E chain(E obj, FlatUtilities.Consumer1<E>... fs) {\n")
 			.append(  "for (FlatUtilities.Consumer1<E> f : fs) {\n")
 			.append(    "f.call(obj);\n")
