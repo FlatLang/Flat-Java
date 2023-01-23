@@ -151,8 +151,8 @@ public class JavaCodeGeneratorEngine extends CodeGeneratorEngine
 
 		for (int i = 0; i < count + 1; i++)
 		{
-			builder.append("  @FunctionalInterface\n");
-			builder.append("  public static interface Function").append(count - i).append("<");
+			builder.append("\n@FunctionalInterface\n");
+			builder.append("public static interface Function").append(count - i).append("<");
 
 			for (int n = i; n < count + 1; n++)
 			{
@@ -165,7 +165,7 @@ public class JavaCodeGeneratorEngine extends CodeGeneratorEngine
 			}
 
 			builder.append("> {\n");
-			builder.append("    T").append(count - i).append(" call(");
+			builder.append("T").append(count - i).append(" call(");
 
 			for (int n = i; n < count; n++) {
 				if (n > i) {
@@ -176,13 +176,13 @@ public class JavaCodeGeneratorEngine extends CodeGeneratorEngine
 			}
 
 			builder.append(");");
-			builder.append("\n  }\n");
+			builder.append("\n}\n");
 		}
 
 		for (int i = 0; i < count + 1; i++)
 		{
-			builder.append("  @FunctionalInterface\n");
-			builder.append("  public static interface Consumer").append(count - i);
+			builder.append("\n@FunctionalInterface\n");
+			builder.append("public static interface Consumer").append(count - i);
 
 			if (count - i > 0) {
 				builder.append("<");
@@ -199,7 +199,7 @@ public class JavaCodeGeneratorEngine extends CodeGeneratorEngine
 			}
 
 			builder.append(" {\n");
-			builder.append("    void ").append(" call(");
+			builder.append("void ").append(" call(");
 
 			for (int n = i; n < count; n++) {
 				if (n > i) {
@@ -210,14 +210,14 @@ public class JavaCodeGeneratorEngine extends CodeGeneratorEngine
 			}
 
 			builder.append(");");
-			builder.append("\n  }\n");
+			builder.append("\n}\n");
 		}
 
 		builder.append("}\n");
 
 		try
 		{
-			writeFile("FlatUtilities.java", new File(controller.outputDirectory, "src/main/flat"), builder.toString());
+			writeFile("FlatUtilities.java", new File(controller.outputDirectory, "src/main/flat"), formatText(builder.toString()));
 		}
 		catch (IOException e)
 		{
