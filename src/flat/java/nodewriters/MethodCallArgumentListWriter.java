@@ -1,6 +1,7 @@
 package flat.java.nodewriters;
 
 import flat.tree.*;
+import flat.tree.variables.Variable;
 
 public abstract class MethodCallArgumentListWriter extends ArgumentListWriter
 {
@@ -29,11 +30,13 @@ public abstract class MethodCallArgumentListWriter extends ArgumentListWriter
 			
 			boolean optional = method instanceof FlatMethodDeclaration && ((FlatMethodDeclaration)method).getParameterList().getParameter(i).isOptional();
 
-			boolean propagateOptional = optional && node().getParentMethod() instanceof Constructor && method instanceof InitializationMethod;
+			boolean propagateOptional = optional &&
+				node().getParentMethod() instanceof Constructor &&
+				method instanceof InitializationMethod;
 			
 			if (i < values.length)
 			{
-				if (propagateOptional) {
+				if (propagateOptional && values[i] instanceof Variable && ((Variable) values[i]).declaration instanceof Parameter) {
 					getWriter((Identifier) values[i]).writeOptionalName(builder);
 				} else {
 					if (optional) {
