@@ -119,6 +119,9 @@ public class JavaCodeGeneratorEngine extends CodeGeneratorEngine
 				File packageFile = new File(outputDir, file.getPackage().getLocation());
 				packageFile.mkdirs();
 
+				controller.log("Writing file with name: " + file.getName());
+				controller.log("Writing file " + file.getPackage().getLocation() + "/" + getWriter(file).writeName());
+
 				writeFile(file.getPackage().getLocation() + "/" + getWriter(file).writeName(), outputDir, formatText(getWriter(file).write().toString()));
 			}
 			catch (IOException e)
