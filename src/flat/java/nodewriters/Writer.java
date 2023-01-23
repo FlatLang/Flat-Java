@@ -1005,6 +1005,17 @@ public class Writer
 				}
 			};
 		}
+		else if (node instanceof ArrayOverloadMethod)
+		{
+			return new ArrayOverloadMethodWriter()
+			{
+				@Override
+				public ArrayOverloadMethod node()
+				{
+					return (ArrayOverloadMethod)node;
+				}
+			};
+		}
 		else if (node instanceof BodyMethodDeclaration)
 		{
 			return new BodyMethodDeclarationWriter()
@@ -1168,6 +1179,11 @@ public class Writer
 	public static AnonymousCompilerMethodWriter getWriter(final AnonymousCompilerMethod node)
 	{
 		return (AnonymousCompilerMethodWriter)getWriter((Node)node);
+	}
+
+	public static ArrayOverloadMethodWriter getWriter(final ArrayOverloadMethod node)
+	{
+		return (ArrayOverloadMethodWriter)getWriter((Node)node);
 	}
 
 	public static BodyMethodDeclarationWriter getWriter(final BodyMethodDeclaration node)
