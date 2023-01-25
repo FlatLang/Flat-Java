@@ -19,6 +19,8 @@ public abstract class LiteralWriter extends IValueWriter implements AccessibleWr
 
 			if (isFloat()) {
 				builder.append("f");
+			} else if (isLong() && !isInt()) {
+				builder.append("L");
 			}
 		}
 		
@@ -48,6 +50,26 @@ public abstract class LiteralWriter extends IValueWriter implements AccessibleWr
 
 		try {
 			Double.valueOf(node().value);
+
+			return true;
+		} catch (NumberFormatException e) {
+			return false;
+		}
+	}
+
+	public boolean isInt() {
+		try {
+			Integer.valueOf(node().value);
+
+			return true;
+		} catch (NumberFormatException e) {
+			return false;
+		}
+	}
+
+	public boolean isLong() {
+		try {
+			Long.valueOf(node().value);
 
 			return true;
 		} catch (NumberFormatException e) {
