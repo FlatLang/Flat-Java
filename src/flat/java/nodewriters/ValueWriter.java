@@ -187,7 +187,7 @@ public abstract class ValueWriter extends NodeWriter
 				for (; i < params.getNumVisibleChildren(); i++) {
 					if (i > 0) builder.append(", ");
 
-					getWriter(params.getVisibleChild(i)).writeDefaultType(builder);
+					builder.append("?");
 				}
 
 				if (printCaret) builder.append(">");

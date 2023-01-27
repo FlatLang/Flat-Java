@@ -13,6 +13,9 @@ public abstract class GenericTypeArgumentWriter extends IIdentifierWriter
     }
 
     public StringBuilder writeExpression(StringBuilder builder, Value context) {
+        if (node().autoAdded) {
+            return builder.append("?");
+        }
         if (node().isGenericType()) {
             return writeGenericType(builder, context);
         }
