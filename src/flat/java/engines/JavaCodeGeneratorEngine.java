@@ -105,30 +105,34 @@ public class JavaCodeGeneratorEngine extends CodeGeneratorEngine
 		writePom();
 		writeFlatUtilities();
 
-		tree.getRoot().forEachVisibleListChild(file -> {
-			try
-			{
-				File outputDir = new File(getOutputDirectory(file), "src");
+		tree.getRoot()
+			.getChildStream()
+			.map(n -> (FileDeclaration)n)
+			.parallel()
+			.forEach(file -> {
+				try
+				{
+					File outputDir = new File(getOutputDirectory(file), "src");
 
-				if (isTestFile(file.file)) {
-					outputDir = new File(outputDir, "test");
-				} else {
-					outputDir = new File(outputDir, "main");
+					if (isTestFile(file.file)) {
+						outputDir = new File(outputDir, "test");
+					} else {
+						outputDir = new File(outputDir, "main");
+					}
+
+					File packageFile = new File(outputDir, file.getPackage().getLocation());
+					packageFile.mkdirs();
+
+					controller.log("Writing file with name: " + file.getName());
+					controller.log("Writing file " + file.getPackage().getLocation() + "/" + getWriter(file).writeName());
+
+					writeFile(file.getPackage().getLocation() + "/" + getWriter(file).writeName(), outputDir, formatText(getWriter(file).write().toString()));
 				}
-
-				File packageFile = new File(outputDir, file.getPackage().getLocation());
-				packageFile.mkdirs();
-
-				controller.log("Writing file with name: " + file.getName());
-				controller.log("Writing file " + file.getPackage().getLocation() + "/" + getWriter(file).writeName());
-
-				writeFile(file.getPackage().getLocation() + "/" + getWriter(file).writeName(), outputDir, formatText(getWriter(file).write().toString()));
-			}
-			catch (IOException e)
-			{
-				e.printStackTrace();
-			}
-		});
+				catch (IOException e)
+				{
+					e.printStackTrace();
+				}
+			});
 	}
 
 	private static boolean isTestFile(File file) {
