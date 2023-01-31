@@ -54,6 +54,8 @@ public abstract class ParameterListWriter extends TypeListWriter
 					case "Long": builder.append("java.lang.Long"); break;
 					case "Char": builder.append("java.lang.Character"); break;
 					case "Bool": builder.append("java.lang.Boolean"); break;
+					case "Float": builder.append("java.lang.Float"); break;
+					case "Double": builder.append("java.lang.Double"); break;
 					default: builder.append("???");
 				}
 			} else if (!names && param instanceof Parameter) {
