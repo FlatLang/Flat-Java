@@ -70,10 +70,8 @@ public abstract class ScopeWriter extends NodeWriter
 		if (wasIf[0]) {
 			builder.append("\n");
 		}
-		
-		FlatMethodDeclaration method = node().getParentMethod();
-		
-		if (method instanceof InitializationMethod)
+
+		if (node().getParent() instanceof InitializationMethod)
 		{
 			builder.append("return this;\n");
 		}
