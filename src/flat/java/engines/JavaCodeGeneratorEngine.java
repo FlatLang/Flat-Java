@@ -187,7 +187,7 @@ public class JavaCodeGeneratorEngine extends CodeGeneratorEngine
 				builder.append("T").append(n - i);
 			}
 
-			builder.append("> {\n");
+			builder.append("> extends FlatObject {\n");
 			builder.append("T").append(count - i).append(" call(");
 
 			for (int n = i; n < count; n++) {
@@ -221,7 +221,7 @@ public class JavaCodeGeneratorEngine extends CodeGeneratorEngine
 				builder.append(">");
 			}
 
-			builder.append(" {\n");
+			builder.append(" extends FlatObject {\n");
 			builder.append("void ").append(" call(");
 
 			for (int n = i; n < count; n++) {
