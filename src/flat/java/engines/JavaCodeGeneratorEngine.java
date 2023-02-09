@@ -135,7 +135,7 @@ public class JavaCodeGeneratorEngine extends CodeGeneratorEngine
 			});
 	}
 
-	private static boolean isTestFile(File file) {
+	public static boolean isTestFile(File file) {
 		return file.getName().contains("_Test");
 	}
 

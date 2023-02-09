@@ -1,6 +1,9 @@
 package flat.java.nodewriters;
 
-import flat.tree.*;
+import flat.tree.ClassDeclaration;
+import flat.tree.Import;
+
+import static flat.java.engines.JavaCodeGeneratorEngine.isTestFile;
 
 public abstract class ImportWriter extends NodeWriter
 {
@@ -9,6 +12,12 @@ public abstract class ImportWriter extends NodeWriter
 	@Override
 	public StringBuilder write(StringBuilder builder)
 	{
+		if (node().getClassDeclaration() != null &&
+			node().getClassDeclaration().getFileDeclaration() != null &&
+			!isTestFile(node().getFileDeclaration().file) &&
+			isTestFile(node().getClassDeclaration().getFileDeclaration().file)) {
+			return builder;
+		}
 		if (node().isExternal()) {
 			return builder;
 		}
