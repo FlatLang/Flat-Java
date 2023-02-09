@@ -1075,6 +1075,17 @@ public class Writer
 				}
 			};
 		}
+		else if (node instanceof ClosureVariableDeclaration)
+		{
+			return new ClosureVariableDeclarationWriter()
+			{
+				@Override
+				public ClosureVariableDeclaration node()
+				{
+					return (ClosureVariableDeclaration)node;
+				}
+			};
+		}
 		else if (node instanceof VariableDeclaration)
 		{
 			return new VariableDeclarationWriter()
@@ -1565,6 +1576,11 @@ public class Writer
 		return (VariableDeclarationListWriter)getWriter((Node)node);
 	}
 	
+	public static ClosureVariableDeclarationWriter getWriter(final ClosureVariableDeclaration node)
+	{
+		return (ClosureVariableDeclarationWriter)getWriter((Node)node);
+	}
+
 	public static VariableDeclarationWriter getWriter(final VariableDeclaration node)
 	{
 		return (VariableDeclarationWriter)getWriter((Node)node);

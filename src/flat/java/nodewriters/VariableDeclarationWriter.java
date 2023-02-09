@@ -1,11 +1,34 @@
 package flat.java.nodewriters;
 
+import flat.tree.FlatMethodDeclaration;
+import flat.tree.Node;
 import flat.tree.Value;
+import flat.tree.lambda.LambdaMethodDeclaration;
 import flat.tree.variables.VariableDeclaration;
+
+import java.util.stream.Stream;
 
 public abstract class VariableDeclarationWriter extends IIdentifierWriter
 {
 	public abstract VariableDeclaration node();
+
+	public boolean requiresLambdaWrapperClass() {
+		FlatMethodDeclaration methodDeclaration = node().getParentMethod();
+
+		if (methodDeclaration == null) return false;
+
+		LambdaMethodDeclaration parentLambda = methodDeclaration instanceof LambdaMethodDeclaration
+			? (LambdaMethodDeclaration) methodDeclaration
+			: null;
+
+		if (Stream.concat(node().references.stream(), node().closureVariableDeclarations.stream().flatMap(c -> c.references.stream()))
+			.map(Node::getParentMethod)
+			.anyMatch(method -> method != parentLambda && method instanceof LambdaMethodDeclaration)) {
+			return true;
+		}
+
+		return false;
+	}
 
 	@Override
 	public StringBuilder write(StringBuilder builder) {
@@ -20,6 +43,10 @@ public abstract class VariableDeclarationWriter extends IIdentifierWriter
 	}
 
 	private StringBuilder writeDefaultValue(StringBuilder builder) {
+		if (requiresLambdaWrapperClass()) {
+			return builder.append("new java.util.concurrent.atomic.AtomicReference<>()");
+		}
+
 		if (node().isPrimitive()) {
 			switch (node().getType()) {
 				case "Bool": return builder.append("false");
@@ -28,6 +55,29 @@ public abstract class VariableDeclarationWriter extends IIdentifierWriter
 		}
 
 		return builder.append("null");
+	}
+
+	public StringBuilder writeType(
+		StringBuilder builder,
+		boolean space,
+		boolean convertPrimitive,
+		boolean boxPrimitive,
+		Value context,
+		boolean checkLambdaWrapperClass
+	) {
+		if (checkLambdaWrapperClass && requiresLambdaWrapperClass()) {
+			builder.append("java.util.concurrent.atomic.AtomicReference<");
+			super.writeType(builder, false, convertPrimitive, boxPrimitive, context);
+			builder.append('>');
+
+			if (space) {
+				builder.append(' ');
+			}
+
+			return builder;
+		}
+
+		return super.writeType(builder, space, convertPrimitive, boxPrimitive, context);
 	}
 
 	public final StringBuilder writeSignature()
@@ -44,7 +94,7 @@ public abstract class VariableDeclarationWriter extends IIdentifierWriter
 	}
 
 	public StringBuilder writeSignature(StringBuilder builder, Value context, String name) {
-		writeType(builder, true, true, false, context);
+		writeType(builder, true, true, false, context, true);
 		return writeName(builder, name);
 	}
 
