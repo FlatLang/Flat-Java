@@ -29,7 +29,16 @@ public abstract class ClassDeclarationWriter extends InstanceDeclarationWriter
 		
 		return builder.append("}\n");
 	}
-	
+
+	@Override
+	public StringBuilder writeStatic(StringBuilder builder) {
+		if (node().encapsulatingClass != null) {
+			return builder.append("static ");
+		}
+
+		return super.writeStatic(builder);
+	}
+
 	@Override
 	public StringBuilder writeSignature(StringBuilder builder, Value context, String name)
 	{
