@@ -15,7 +15,7 @@ public abstract class GenericTypeArgumentWriter extends IIdentifierWriter
         if (node().getTypeObject() instanceof FunctionType) {
             FirstClassClosureDeclaration closure = ((FunctionType) node().getTypeObject()).closure;
 
-            return getWriter(closure).writeType(builder, space, convertPrimitive, boxPrimitive, context);
+            return getWriter(closure).writeType(builder, space, true, boxPrimitive, context);
         }
 
         return super.writeType(builder, space, convertPrimitive, boxPrimitive, context);
