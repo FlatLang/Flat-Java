@@ -42,8 +42,17 @@ public abstract class AssignmentWriter extends ValueWriter
 
 		getWriter(node().getAssigneeNode()).writeExpression(builder).append(" = ");
 
-		builder.append(cast);
+		if (cast.length() > 0) {
+			builder.append(cast);
+			builder.append('(');
+		}
 
-		return getWriter(node().getAssignmentNode()).writeExpression(builder);
+		getWriter(node().getAssignmentNode()).writeExpression(builder);
+
+		if (cast.length() > 0) {
+			builder.append(')');
+		}
+
+		return builder;
 	}
 }
