@@ -158,6 +158,8 @@ public abstract class ValueWriter extends NodeWriter
 	}
 
 	public StringBuilder writeGenericArguments(StringBuilder builder, Value context) {
+		if (node().isGenericType()) return builder;
+
 		GenericTypeArgumentList args = node().getGenericTypeArgumentList();
 
 		boolean printCaret = true;
