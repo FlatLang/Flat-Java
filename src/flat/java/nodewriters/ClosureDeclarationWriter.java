@@ -19,7 +19,7 @@ public abstract class ClosureDeclarationWriter extends ParameterWriter
 
 		builder.append(node().getParameterList().getNumParameters());
 
-		if (node().getParameterList().getNumVisibleChildren() > 0) {
+		if (node().getParameterList().getNumVisibleChildren() > 0 || node().getType() != null) {
 			builder.append("<");
 
 			getWriter(node().getParameterList()).write(builder, false, false, true, context);
