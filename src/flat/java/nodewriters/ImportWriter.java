@@ -36,6 +36,10 @@ public abstract class ImportWriter extends NodeWriter
 	{
 		builder.append("import ");
 
+		if (node().isStatic) {
+			builder.append("static ");
+		}
+
 		if (node().isPackageImport()) {
 			return builder.append(node().location.replace('/', '.')).append(".*");
 		}
@@ -60,6 +64,12 @@ public abstract class ImportWriter extends NodeWriter
 
 		builder.append(prefix);
 
-		return getWriter(c).writeName(builder);
+		getWriter(c).writeName(builder);
+
+		if (node().isStatic) {
+			builder.append(".*");
+		}
+
+		return builder;
 	}
 }
