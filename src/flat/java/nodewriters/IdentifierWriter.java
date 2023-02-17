@@ -1,7 +1,10 @@
 package flat.java.nodewriters;
 
 import flat.tree.Closure;
+import flat.tree.ExtensionMethodDeclaration;
 import flat.tree.Identifier;
+import flat.tree.ReferenceParameter;
+import flat.tree.variables.ObjectReference;
 
 public abstract class IdentifierWriter extends ValueWriter implements AccessibleWriter {
     public abstract Identifier node();
@@ -24,7 +27,16 @@ public abstract class IdentifierWriter extends ValueWriter implements Accessible
         return builder;
     }
 
+    public StringBuilder writeExtensionReferenceAccess(StringBuilder builder) {
+        if (node().getParentMethod() instanceof ExtensionMethodDeclaration == false) return builder;
+        if (node().getReferenceTypeNode() instanceof ObjectReference == false) return builder;
+        if (node().isAccessedWithinStaticContext()) return builder;
+
+        return builder.append("_this.");
+    }
+
     public StringBuilder writeUseExpression(StringBuilder builder) {
+        writeExtensionReferenceAccess(builder);
         return writeName(builder).append(writeArrayAccess());
     }
 

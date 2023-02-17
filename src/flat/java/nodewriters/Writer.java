@@ -1020,6 +1020,17 @@ public class Writer
 				}
 			};
 		}
+		else if (node instanceof ExtensionMethodDeclaration)
+		{
+			return new ExtensionMethodDeclarationWriter()
+			{
+				@Override
+				public ExtensionMethodDeclaration node()
+				{
+					return (ExtensionMethodDeclaration)node;
+				}
+			};
+		}
 		else if (node instanceof BodyMethodDeclaration)
 		{
 			return new BodyMethodDeclarationWriter()
@@ -1199,6 +1210,11 @@ public class Writer
 	public static ArrayOverloadMethodWriter getWriter(final ArrayOverloadMethod node)
 	{
 		return (ArrayOverloadMethodWriter)getWriter((Node)node);
+	}
+
+	public static ExtensionMethodDeclarationWriter getWriter(final ExtensionMethodDeclaration node)
+	{
+		return (ExtensionMethodDeclarationWriter)getWriter((Node)node);
 	}
 
 	public static BodyMethodDeclarationWriter getWriter(final BodyMethodDeclaration node)

@@ -18,7 +18,11 @@ public abstract class FlatMethodDeclarationWriter extends MethodDeclarationWrite
 		return writeParameters(builder, context, null);
 	}
 
-	public StringBuilder writeParameters(StringBuilder builder, Value context, String[] paramNames) {
+	public final StringBuilder writeParameters(StringBuilder builder, Value context, String[] paramNames) {
+		return writeParameters(builder, context, paramNames, true, true, false);
+	}
+
+	public StringBuilder writeParameters(StringBuilder builder, Value context, String[] paramNames, boolean parenthesis, boolean useGivenNames, boolean box) {
 		if (node().doesOverride()) {
 			String[] names = new String[node().getParameterList().getNumVisibleChildren()];
 
@@ -29,7 +33,7 @@ public abstract class FlatMethodDeclarationWriter extends MethodDeclarationWrite
 			return getWriter(node().getRootDeclaration()).writeParameters(builder, node(), names);
 		}
 
-		return getWriter(node().getParameterList()).write(builder, true, true, false, context, paramNames);
+		return getWriter(node().getParameterList()).write(builder, parenthesis, useGivenNames, box, context, paramNames);
 	}
 
 	@Override

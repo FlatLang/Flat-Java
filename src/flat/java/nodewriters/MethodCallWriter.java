@@ -27,6 +27,7 @@ public abstract class MethodCallWriter extends VariableWriter
 	@Override
 	public StringBuilder writeUseExpression(StringBuilder builder)
 	{
+		writeExtensionReferenceAccess(builder);
 		writeName(builder);
 		
 		if (node().getCallableDeclaration() instanceof ClosureDeclaration)
