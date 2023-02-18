@@ -68,7 +68,7 @@ public abstract class VariableDeclarationWriter extends IIdentifierWriter
 	) {
 		if (checkLambdaWrapperClass && requiresLambdaWrapperClass()) {
 			builder.append("java.util.concurrent.atomic.AtomicReference<");
-			super.writeType(builder, false, convertPrimitive, boxPrimitive, context);
+			super.writeType(builder, false, convertPrimitive, true, context);
 			builder.append('>');
 
 			if (space) {
