@@ -45,4 +45,28 @@ public interface AccessibleWriter
 		
 		return builder;
 	}
+
+	default StringBuilder writeUntil(Accessible stopBefore)
+	{
+		return writeUntil(new StringBuilder(), stopBefore);
+	}
+
+	default StringBuilder writeUntil(StringBuilder builder, Accessible stopBefore)
+	{
+		Value current = node().toValue();
+
+		while (current != null && current != stopBefore)
+		{
+			if (current != node())
+			{
+				builder.append('.');
+			}
+
+			getWriter(current).writeUseExpression(builder);
+
+			current = ((Accessible)current).getAccessedNode();
+		}
+
+		return builder;
+	}
 }

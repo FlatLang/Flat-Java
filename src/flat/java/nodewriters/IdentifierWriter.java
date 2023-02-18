@@ -1,13 +1,13 @@
 package flat.java.nodewriters;
 
-import flat.tree.*;
-import flat.tree.lambda.LambdaMethodDeclaration;
-import flat.tree.variables.FieldDeclaration;
+import flat.tree.Accessible;
+import flat.tree.Closure;
+import flat.tree.ExtensionDeclaration;
+import flat.tree.Identifier;
 import flat.tree.variables.ObjectReference;
 import flat.tree.variables.Variable;
-import javafx.util.Pair;
 
-import java.util.stream.Stream;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public abstract class IdentifierWriter extends ValueWriter implements AccessibleWriter {
     public abstract Identifier node();
@@ -16,26 +16,28 @@ public abstract class IdentifierWriter extends ValueWriter implements Accessible
         return node() instanceof Variable && getWriter((Variable)node()).isExtensionDeclaration();
     }
 
-    public boolean hasPathToExtension() {
-        return filterToExtensionSink(node().getAccessedNodes().stream()).findAny().isPresent();
-    }
+    // FIXME: This needs to handle Accessibles as the path start
+    public AccessorPath<Identifier, Variable> getExtensionPath() {
+        AtomicInteger count = new AtomicInteger();
 
-    private <TType extends Accessible> Stream<Variable> filterToExtensionSink(Stream<TType> stream) {
-        return stream
+        return node().getAccessedNodes().stream()
+            .peek(a -> count.incrementAndGet())
             .filter(a -> a instanceof Variable)
             .map(a -> (Variable)a)
-            .filter(v -> getWriter(v).isExtensionDeclaration());
-    }
-
-    public Pair<Identifier, Variable> getExtensionPath() {
-        return getExtensionPath(true);
-    }
-
-    // FIXME: This needs to handle Accessibles as the path start
-    public Pair<Identifier, Variable> getExtensionPath(boolean inclusive) {
-        return filterToExtensionSink(node().getAccessedNodes().stream())
+            .filter(v -> getWriter(v).isExtensionDeclaration())
             .findFirst()
-            .map(variable -> new Pair<>(inclusive ? node() : node().getAccessedNode(), variable))
+            .map(variable -> new AccessorPath<>(node(), variable, count.get()))
+            .orElse(null);
+    }
+
+    public AccessorPath<Identifier, Accessible> getChainPath() {
+        AtomicInteger count = new AtomicInteger();
+
+        return node().getAccessedNodes().stream()
+            .peek(a -> count.incrementAndGet())
+            .filter(Accessible::isChainNavigation)
+            .findFirst()
+            .map(accessible -> new AccessorPath<>(node(), accessible, count.get()))
             .orElse(null);
     }
 
@@ -51,17 +53,18 @@ public abstract class IdentifierWriter extends ValueWriter implements Accessible
             getWriter((Closure)node().getReturnedNode()).writeLambdaParams(builder);
         }
 
-        if (node().doesAccess() && node().getAccessedNode().isChainNavigation()) {
+        AccessorPath<Identifier, Accessible> chainPath = getChainPath();
+        AccessorPath<Identifier, Variable> extensionPath = getExtensionPath();
+
+        if ((!node().isAccessed() || node().isChainNavigation()) && chainPath != null && (extensionPath == null || extensionPath.distance > chainPath.distance)) {
             builder.append("FlatUtilities.chain(");
-            writeUseExpression(builder).append(", _cr -> _cr.");
-            return writeAccessedExpression(builder, stopAt, false).append(")");
+            writeUntil(builder, chainPath.to).append(", _cr -> _cr.");
+            return getWriter(chainPath.to.toValue()).writeExpression(builder, stopAt).append(')');
+//            return writeAccessedExpression(builder, stopAt, false).append(")");
         }
-
-        if (hasPathToExtension()) {
-            Pair<Identifier, Variable> path = getExtensionPath();
-
-            if (path.getValue() != stopAt) {
-                return getWriter(path.getValue()).writeExtensionUseExpression(builder, path.getKey());
+        if (extensionPath != null) {
+            if (extensionPath.to != stopAt) {
+                return getWriter(extensionPath.to).writeExtensionUseExpression(builder, extensionPath.from);
             }
         }
 
@@ -124,4 +127,15 @@ public abstract class IdentifierWriter extends ValueWriter implements Accessible
         return writeName(builder, name).append("_optional");
     }
 
+    static class AccessorPath<TFrom extends Accessible, TTo extends Accessible> {
+        TFrom from;
+        TTo to;
+        int distance;
+
+        public AccessorPath(TFrom from, TTo to, int distance) {
+            this.from = from;
+            this.to = to;
+            this.distance = distance;
+        }
+    }
 }
