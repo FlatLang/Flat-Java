@@ -8,7 +8,7 @@ public abstract class DefaultParameterInitializationWriter extends NodeWriter
 	public abstract DefaultParameterInitialization node();
 	
 	@Override
-	public StringBuilder writeExpression(StringBuilder builder)
+	public StringBuilder writeExpression(StringBuilder builder, Accessible stopAt)
 	{
 		Parameter param = node().parameter;
 		
@@ -20,6 +20,6 @@ public abstract class DefaultParameterInitializationWriter extends NodeWriter
 			builder.append("this.");
 		}
 
-		return getWriter(param.getDefaultValue()).writeExpression(builder).append(" : ").append(optionalName).append(".get()");
+		return getWriter(param.getDefaultValue()).writeExpression(builder, stopAt).append(" : ").append(optionalName).append(".get()");
 	}
 }

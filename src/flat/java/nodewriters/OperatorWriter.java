@@ -13,7 +13,7 @@ public abstract class OperatorWriter extends IValueWriter
 	}
 	
 	@Override
-	public StringBuilder writeExpression(StringBuilder builder)
+	public StringBuilder writeExpression(StringBuilder builder, Accessible stopAt)
 	{
 		return builder.append(node().operator);
 	}

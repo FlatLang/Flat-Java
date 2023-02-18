@@ -1,5 +1,6 @@
 package flat.java.nodewriters;
 
+import flat.tree.Accessible;
 import flat.tree.FlatMethodDeclaration;
 import flat.tree.Node;
 import flat.tree.Value;
@@ -38,7 +39,7 @@ public abstract class VariableDeclarationWriter extends IIdentifierWriter
 	}
 
 	@Override
-	public StringBuilder writeExpression(StringBuilder builder) {
+	public StringBuilder writeExpression(StringBuilder builder, Accessible stopAt) {
 		return writeSignature(builder);
 	}
 

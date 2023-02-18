@@ -18,17 +18,17 @@ public abstract class ParameterWriter extends LocalDeclarationWriter
 	}
 	
 	@Override
-	public final StringBuilder writeExpression(StringBuilder builder)
+	public final StringBuilder writeExpression(StringBuilder builder, Accessible stopAt)
 	{
-		return writeExpression(builder, null);
+		return writeExpression(builder, stopAt, null);
 	}
 
-	public final StringBuilder writeExpression(StringBuilder builder, Value context)
+	public final StringBuilder writeExpression(StringBuilder builder, Accessible stopAt, Value context)
 	{
-		return writeExpression(builder, context, null);
+		return writeExpression(builder, stopAt, context, null);
 	}
 
-	public StringBuilder writeExpression(StringBuilder builder, Value context, String name)
+	public StringBuilder writeExpression(StringBuilder builder, Accessible stopAt, Value context, String name)
 	{
 		return writeSignature(builder, context, name);
 	}

@@ -7,7 +7,7 @@ public abstract class ReturnWriter extends IValueWriter
 	public abstract Return node();
 	
 	@Override
-	public StringBuilder writeExpression(StringBuilder builder)
+	public StringBuilder writeExpression(StringBuilder builder, Accessible stopAt)
 	{
 		builder.append("return");
 		
@@ -15,7 +15,7 @@ public abstract class ReturnWriter extends IValueWriter
 		{
 			builder.append(' ');
 			
-			getWriter(node().getValueNode()).writeExpression(builder);
+			getWriter(node().getValueNode()).writeExpression(builder, stopAt);
 		}
 		
 		return builder;

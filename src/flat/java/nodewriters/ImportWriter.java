@@ -1,6 +1,8 @@
 package flat.java.nodewriters;
 
+import flat.tree.Accessible;
 import flat.tree.ClassDeclaration;
+import flat.tree.ExtensionDeclaration;
 import flat.tree.Import;
 
 import static flat.java.engines.JavaCodeGeneratorEngine.isTestFile;
@@ -32,11 +34,13 @@ public abstract class ImportWriter extends NodeWriter
 	}
 	
 	@Override
-	public StringBuilder writeExpression(StringBuilder builder)
+	public StringBuilder writeExpression(StringBuilder builder, Accessible stopAt)
 	{
 		builder.append("import ");
 
-		if (node().isStatic) {
+		boolean staticImport = node().isStatic || node().getClassDeclaration() instanceof ExtensionDeclaration;
+
+		if (staticImport) {
 			builder.append("static ");
 		}
 
@@ -66,7 +70,7 @@ public abstract class ImportWriter extends NodeWriter
 
 		getWriter(c).writeName(builder);
 
-		if (node().isStatic) {
+		if (staticImport) {
 			builder.append(".*");
 		}
 

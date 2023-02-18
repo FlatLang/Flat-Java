@@ -27,7 +27,12 @@ public abstract class MethodCallWriter extends VariableWriter
 	@Override
 	public StringBuilder writeUseExpression(StringBuilder builder)
 	{
-		writeExtensionReferenceAccess(builder);
+		if (isExtensionDeclaration()) {
+			return writeExtensionUseExpression(builder, node());
+		} else {
+			writeExtensionReferenceAccess(builder);
+		}
+
 		writeName(builder);
 		
 		if (node().getCallableDeclaration() instanceof ClosureDeclaration)
@@ -36,5 +41,26 @@ public abstract class MethodCallWriter extends VariableWriter
 		}
 		
 		return getWriter(node().getArgumentList()).write(builder);
+	}
+
+	@Override
+	public StringBuilder writeExtensionUseExpression(StringBuilder builder, Identifier start) {
+		writeName(builder).append('(');
+
+		if (node() == start) {
+			builder.append("_this");
+		} else {
+			getWriter(start).writeExpression(builder, node());
+		}
+
+		StringBuilder args = getWriter(node().getArgumentList()).write(new StringBuilder(), false);
+
+		if (args.length() > 0) {
+			builder.append(", ").append(args);
+		}
+
+		builder.append(')');
+
+		return writeAccessedExpression(builder);
 	}
 }

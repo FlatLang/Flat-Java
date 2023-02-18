@@ -1,15 +1,35 @@
 package flat.java.nodewriters;
 
-import flat.tree.Assignment;
-import flat.tree.Value;
+import flat.tree.*;
 import flat.tree.variables.Variable;
 
 public abstract class VariableWriter extends IdentifierWriter
 {
 	public abstract Variable node();
 
+	public boolean isExtensionDeclaration() {
+		return node().declaration instanceof ExtensionMethodDeclaration || node().declaration instanceof ExtensionFieldDeclaration;
+	}
+
 	public boolean requiresLambdaWrapperClass() {
 		return getWriter(node().declaration).requiresLambdaWrapperClass();
+	}
+
+	public StringBuilder writeExtensionUseExpression(StringBuilder builder, Identifier start) {
+		throw new UnsupportedOperationException("should be a method call (" + node().getClass().getName() + "/" + node().declaration.getClass().getName() + "): (" + node().isUserMade() + "/" + node().declaration.isUserMade() + "): " + node().getParentClass().getName() + "." + node().getParentMethod().getName() + ": " + node().generateFlatInput());
+	}
+
+	@Override
+	public StringBuilder writeName(StringBuilder builder, String name) {
+		if (node().getName().equals("this")) {
+			FlatMethodDeclaration method = node().getParentMethod();
+
+			if (method instanceof ExtensionMethodDeclaration || method instanceof PropertyMethod && method.getParentClass() instanceof ExtensionDeclaration) {
+				return builder.append("_this");
+			}
+		}
+
+		return super.writeName(builder, name);
 	}
 
 	@Override

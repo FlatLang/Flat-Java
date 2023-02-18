@@ -64,4 +64,16 @@ public abstract class BodyMethodDeclarationWriter extends FlatMethodDeclarationW
 
 		return builder;
 	}
+
+	public StringBuilder writeExtensionReferenceParameter(StringBuilder builder) {
+		getWriter(node().getParameterList().getReferenceParameter()).writeType(builder, true);
+
+		builder.append("_this");
+
+		if (node().getParameterList().getNumVisibleChildren() > 0) {
+			builder.append(", ");
+		}
+
+		return builder;
+	}
 }

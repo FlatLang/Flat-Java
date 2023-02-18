@@ -1,9 +1,6 @@
 package flat.java.nodewriters;
 
-import flat.tree.ClassDeclaration;
-import flat.tree.FirstClassClosureDeclaration;
-import flat.tree.FunctionType;
-import flat.tree.Value;
+import flat.tree.*;
 import flat.tree.generics.GenericTypeArgument;
 
 public abstract class GenericTypeArgumentWriter extends IIdentifierWriter
@@ -33,11 +30,11 @@ public abstract class GenericTypeArgumentWriter extends IIdentifierWriter
     }
 
     @Override
-    public StringBuilder writeExpression(StringBuilder builder) {
-        return writeExpression(builder, null);
+    public final StringBuilder writeExpression(StringBuilder builder, Accessible stopAt) {
+        return writeExpression(builder, stopAt, null);
     }
 
-    public StringBuilder writeExpression(StringBuilder builder, Value context) {
+    public StringBuilder writeExpression(StringBuilder builder, Accessible stopAt, Value context) {
         if (node().isGenericType()) {
             return writeGenericType(builder, context);
         }

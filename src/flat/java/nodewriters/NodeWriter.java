@@ -21,7 +21,12 @@ public abstract class NodeWriter extends Writer
 		return writeExpression(new StringBuilder());
 	}
 	
-	public StringBuilder writeExpression(final StringBuilder builder)
+	public final StringBuilder writeExpression(final StringBuilder builder)
+	{
+		return writeExpression(builder, null);
+	}
+
+	public StringBuilder writeExpression(final StringBuilder builder, Accessible stopAt)
 	{
 		return builder.append("{{").append(node().getClass().getSimpleName()).append("}}");
 	}

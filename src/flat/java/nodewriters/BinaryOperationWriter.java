@@ -7,7 +7,7 @@ public abstract class BinaryOperationWriter extends IValueWriter
 	public abstract BinaryOperation node();
 
 	@Override
-	public StringBuilder writeExpression(StringBuilder builder)
+	public StringBuilder writeExpression(StringBuilder builder, Accessible stopAt)
 	{
 		boolean cast = requiresCast();
 
@@ -18,11 +18,11 @@ public abstract class BinaryOperationWriter extends IValueWriter
 			builder.append("(");
 		}
 
-		getWriter(node().getLeftOperand()).writeExpression(builder);
+		getWriter(node().getLeftOperand()).writeExpression(builder, stopAt);
 
 		writeOperator(builder);
 
-		getWriter(node().getRightOperand()).writeExpression(builder);
+		getWriter(node().getRightOperand()).writeExpression(builder, stopAt);
 
 		if (cast) {
 			builder.append(")");

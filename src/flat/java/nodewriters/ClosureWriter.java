@@ -8,7 +8,7 @@ public abstract class ClosureWriter extends VariableWriter
 	public abstract Closure node();
 
 	@Override
-	public StringBuilder writeExpression(StringBuilder builder) {
+	public StringBuilder writeExpression(StringBuilder builder, Accessible stopAt) {
 		FlatMethodDeclaration method = node().getMethodDeclaration();
 
 		if (!node().isAccessed()) {
@@ -19,7 +19,7 @@ public abstract class ClosureWriter extends VariableWriter
 			return getWriter(method.getScope()).write(builder);
 		}
 
-		super.writeExpression(builder);
+		super.writeExpression(builder, stopAt);
 
 		builder.append("(");
 

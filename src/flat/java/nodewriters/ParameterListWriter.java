@@ -61,7 +61,7 @@ public abstract class ParameterListWriter extends TypeListWriter
 			} else if (!names && param instanceof Parameter) {
 				getWriter((Parameter) param).writeType(builder, false, true, false, context);
 			} else if (param instanceof Parameter) {
-				getWriter((Parameter) param).writeExpression(builder, context, name);
+				getWriter((Parameter) param).writeExpression(builder, null, context, name);
 			} else {
 				getWriter(param).writeExpression(builder);
 			}

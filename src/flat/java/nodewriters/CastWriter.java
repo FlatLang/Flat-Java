@@ -7,12 +7,14 @@ public abstract class CastWriter extends IValueWriter
 	public abstract Cast node();
 	
 	@Override
-	public StringBuilder writeExpression(StringBuilder builder)
+	public StringBuilder writeExpression(StringBuilder builder, Accessible stopAt)
 	{
+		if (node() == stopAt) return builder;
+
 		builder.append('(');
 		writeType(builder, false, !node().isPointer());
 		builder.append(')');
 		
-		return getWriter(node().getValueNode()).writeExpression(builder);
+		return getWriter(node().getValueNode()).writeExpression(builder, stopAt);
 	}
 }

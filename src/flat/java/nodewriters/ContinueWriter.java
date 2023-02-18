@@ -7,7 +7,7 @@ public abstract class ContinueWriter extends NodeWriter
 	public abstract Continue node();
 
 	@Override
-	public StringBuilder writeExpression(StringBuilder builder) {
+	public StringBuilder writeExpression(StringBuilder builder, Accessible stopAt) {
 		return builder.append("continue");
 	}
 }

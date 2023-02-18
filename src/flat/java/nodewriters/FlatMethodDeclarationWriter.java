@@ -30,7 +30,7 @@ public abstract class FlatMethodDeclarationWriter extends MethodDeclarationWrite
 				names[i] = node().getParameterList().getVisibleChild(i).getName();
 			}
 
-			return getWriter(node().getRootDeclaration()).writeParameters(builder, node(), names);
+			return getWriter(node().getRootDeclaration()).writeParameters(builder, node(), names, parenthesis, useGivenNames, box);
 		}
 
 		return getWriter(node().getParameterList()).write(builder, parenthesis, useGivenNames, box, context, paramNames);

@@ -43,7 +43,7 @@ public abstract class ClosureDeclarationWriter extends ParameterWriter
 	}
 
 	@Override
-	public StringBuilder writeExpression(StringBuilder builder, Value context, String name)
+	public StringBuilder writeExpression(StringBuilder builder, Accessible stopAt, Value context, String name)
 	{
 		if (node().isOptional()) {
 			builder.append("Optional<");

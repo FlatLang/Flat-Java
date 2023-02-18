@@ -1,15 +1,15 @@
 package flat.java.nodewriters;
 
-import flat.tree.*;
-import flat.tree.variables.Variable;
-import flat.tree.variables.VariableDeclaration;
+import flat.tree.Accessible;
+import flat.tree.Assignment;
+import flat.tree.Value;
 
 public abstract class AssignmentWriter extends ValueWriter
 {
 	public abstract Assignment node();
 	
 	@Override
-	public StringBuilder writeExpression(StringBuilder builder)
+	public StringBuilder writeExpression(StringBuilder builder, Accessible stopAt)
 	{
 		Value leftType = node().getAssigneeNode().getReturnedNode();
 		Value rightType = node().getAssignmentNode().getReturnedNode();
@@ -25,7 +25,7 @@ public abstract class AssignmentWriter extends ValueWriter
 		}
 
 		if (getWriter(node().getAssignedNode()).requiresLambdaWrapperClass()) {
-			getWriter(node().getAssigneeNode()).writeExpression(builder);
+			getWriter(node().getAssigneeNode()).writeExpression(builder, stopAt);
 
 			int start = builder.length() - ".get()".length();
 			int end = builder.length();
@@ -36,18 +36,18 @@ public abstract class AssignmentWriter extends ValueWriter
 
 			builder.append(".set(");
 			builder.append(cast);
-			getWriter(node().getAssignmentNode()).writeExpression(builder);
+			getWriter(node().getAssignmentNode()).writeExpression(builder, stopAt);
 			return builder.append(')');
 		}
 
-		getWriter(node().getAssigneeNode()).writeExpression(builder).append(" = ");
+		getWriter(node().getAssigneeNode()).writeExpression(builder, stopAt).append(" = ");
 
 		if (cast.length() > 0) {
 			builder.append(cast);
 			builder.append('(');
 		}
 
-		getWriter(node().getAssignmentNode()).writeExpression(builder);
+		getWriter(node().getAssignmentNode()).writeExpression(builder, stopAt);
 
 		if (cast.length() > 0) {
 			builder.append(')');

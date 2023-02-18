@@ -7,10 +7,10 @@ public abstract class TernaryOperationWriter extends IValueWriter implements Acc
 	public abstract TernaryOperation node();
 	
 	@Override
-	public StringBuilder writeExpression(StringBuilder builder)
+	public StringBuilder writeExpression(StringBuilder builder, Accessible stopAt)
 	{
-		return getWriter(node().getCondition()).writeExpression(builder).append(" ? ")
-			.append(getWriter(node().getTrueValue()).writeExpression()).append(" : ")
-			.append(getWriter(node().getFalseValue()).writeExpression());
+		getWriter(node().getCondition()).writeExpression(builder, stopAt).append(" ? ");
+		getWriter(node().getTrueValue()).writeExpression(builder, stopAt).append(" : ");
+		return getWriter(node().getFalseValue()).writeExpression(builder, stopAt);
 	}
 }

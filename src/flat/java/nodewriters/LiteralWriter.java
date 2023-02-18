@@ -28,9 +28,13 @@ public abstract class LiteralWriter extends IValueWriter implements AccessibleWr
 	}
 	
 	@Override
-	public StringBuilder writeExpression(final StringBuilder builder)
+	public StringBuilder writeExpression(final StringBuilder builder, Accessible stopAt)
 	{
-		return writeUseExpression(builder).append(writeAccessedExpression());
+		if (node() == stopAt) return builder;
+
+		writeUseExpression(builder);
+
+		return writeAccessedExpression(builder, stopAt);
 	}
 
 	public boolean isFloat() {

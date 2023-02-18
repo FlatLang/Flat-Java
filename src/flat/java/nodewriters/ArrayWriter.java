@@ -1,5 +1,6 @@
 package flat.java.nodewriters;
 
+import flat.tree.Accessible;
 import flat.tree.variables.Array;
 
 public abstract class ArrayWriter extends VariableDeclarationWriter
@@ -21,7 +22,7 @@ public abstract class ArrayWriter extends VariableDeclarationWriter
 	}
 
 	@Override
-	public StringBuilder writeExpression(StringBuilder builder) {
+	public StringBuilder writeExpression(StringBuilder builder, Accessible stopAt) {
 		builder.append("new ");
 
 		return writeUseExpression(builder);

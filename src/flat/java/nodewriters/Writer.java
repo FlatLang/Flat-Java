@@ -624,6 +624,17 @@ public class Writer
 				}
 			};
 		}
+		else if (node instanceof ReferenceParameter)
+		{
+			return new ReferenceParameterWriter()
+			{
+				@Override
+				public ReferenceParameter node()
+				{
+					return (ReferenceParameter)node;
+				}
+			};
+		}
 		else if (node instanceof Parameter)
 		{
 			return new ParameterWriter()
@@ -830,6 +841,17 @@ public class Writer
 				public VariableDeclarationList node()
 				{
 					return (VariableDeclarationList)node;
+				}
+			};
+		}
+		else if (node instanceof ObjectReference)
+		{
+			return new ObjectReferenceWriter()
+			{
+				@Override
+				public ObjectReference node()
+				{
+					return (ObjectReference)node;
 				}
 			};
 		}
@@ -1492,11 +1514,16 @@ public class Writer
 		return (ParameterListWriter)getWriter((Node)node);
 	}
 	
+	public static ReferenceParameterWriter getWriter(final ReferenceParameter node)
+	{
+		return (ReferenceParameterWriter)getWriter((Node)node);
+	}
+
 	public static ParameterWriter getWriter(final Parameter node)
 	{
 		return (ParameterWriter)getWriter((Node)node);
 	}
-	
+
 	public static PriorityWriter getWriter(final Priority node)
 	{
 		return (PriorityWriter)getWriter((Node)node);
@@ -1602,11 +1629,16 @@ public class Writer
 		return (VariableDeclarationWriter)getWriter((Node)node);
 	}
 	
+	public static ObjectReferenceWriter getWriter(final ObjectReference node)
+	{
+		return (ObjectReferenceWriter)getWriter((Node)node);
+	}
+
 	public static VariableWriter getWriter(final Variable node)
 	{
 		return (VariableWriter)getWriter((Node)node);
 	}
-	
+
 	public static VirtualMethodDeclarationWriter getWriter(final VirtualMethodDeclaration node)
 	{
 		return (VirtualMethodDeclarationWriter)getWriter((Node)node);

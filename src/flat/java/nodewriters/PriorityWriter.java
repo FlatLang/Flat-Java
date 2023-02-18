@@ -13,8 +13,12 @@ public abstract class PriorityWriter extends ValueWriter implements AccessibleWr
 	}
 	
 	@Override
-	public StringBuilder writeExpression(StringBuilder builder)
+	public StringBuilder writeExpression(StringBuilder builder, Accessible stopAt)
 	{
-		return writeUseExpression(builder).append(writeAccessedExpression());
+		if (stopAt == node()) return builder;
+
+		writeUseExpression(builder);
+
+		return writeAccessedExpression(builder, stopAt);
 	}
 }

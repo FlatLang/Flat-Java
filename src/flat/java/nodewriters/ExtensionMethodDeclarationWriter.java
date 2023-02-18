@@ -8,18 +8,17 @@ public abstract class ExtensionMethodDeclarationWriter extends BodyMethodDeclara
 	public abstract ExtensionMethodDeclaration node();
 
 	@Override
+	public StringBuilder writeStatic(StringBuilder builder) {
+		return builder.append("static ");
+	}
+
+	@Override
 	public StringBuilder writeParameters(StringBuilder builder, Value context, String[] paramNames, boolean parenthesis, boolean useGivenNames, boolean box) {
 		if (parenthesis) {
 			builder.append('(');
 		}
 
-		getWriter(node().getParameterList().getReferenceParameter()).writeType(builder, true);
-
-		builder.append("_this");
-
-		if (node().getParameterList().getNumVisibleChildren() > 0) {
-			builder.append(", ");
-		}
+		writeExtensionReferenceParameter(builder);
 
 		super.writeParameters(builder, context, paramNames, false, useGivenNames, box);
 
