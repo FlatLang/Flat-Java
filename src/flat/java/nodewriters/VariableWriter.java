@@ -33,6 +33,13 @@ public abstract class VariableWriter extends IdentifierWriter
 	}
 
 	@Override
+	public StringBuilder writeExtensionReferenceAccess(StringBuilder builder) {
+		if (node().getDeclaringClass() instanceof ExtensionDeclaration) return builder;
+
+		return super.writeExtensionReferenceAccess(builder);
+	}
+
+	@Override
 	public StringBuilder writeUseExpression(StringBuilder builder) {
 		if ((node().getRootNode() instanceof Assignment == false || ((Assignment)node().getRootNode()).getAssignedNode() != node()) &&
 			requiresLambdaWrapperClass()) {

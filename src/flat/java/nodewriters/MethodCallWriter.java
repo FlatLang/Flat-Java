@@ -23,7 +23,14 @@ public abstract class MethodCallWriter extends VariableWriter
 		
 		return super.writeName(builder, name);
 	}
-	
+
+	@Override
+	public StringBuilder writeExtensionReferenceAccess(StringBuilder builder) {
+		if (node().declaration instanceof AnonymousCompilerMethod) return builder;
+
+		return super.writeExtensionReferenceAccess(builder);
+	}
+
 	@Override
 	public StringBuilder writeUseExpression(StringBuilder builder)
 	{

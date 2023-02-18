@@ -72,7 +72,6 @@ public abstract class IdentifierWriter extends ValueWriter implements Accessible
     }
 
     public StringBuilder writeExtensionReferenceAccess(StringBuilder builder) {
-        if (node() instanceof Variable && node().getDeclaringClass() instanceof ExtensionDeclaration) return builder;
         if (node().getParentClass() instanceof ExtensionDeclaration == false) return builder;
         if (node().getReferenceTypeNode() instanceof ObjectReference == false) return builder;
         if (node().isAccessedWithinStaticContext()) return builder;
