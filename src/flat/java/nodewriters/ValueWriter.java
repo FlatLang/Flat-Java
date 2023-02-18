@@ -12,7 +12,7 @@ public abstract class ValueWriter extends NodeWriter
 {
 	public abstract Value node();
 	
-	public StringBuilder writeUseExpression()
+	public final StringBuilder writeUseExpression()
 	{
 		return writeUseExpression(new StringBuilder());
 	}
@@ -22,7 +22,7 @@ public abstract class ValueWriter extends NodeWriter
 		return builder.append(writeArrayAccess());
 	}
 	
-	public StringBuilder writeArrayAccess()
+	public final StringBuilder writeArrayAccess()
 	{
 		return writeArrayAccess(new StringBuilder());
 	}
