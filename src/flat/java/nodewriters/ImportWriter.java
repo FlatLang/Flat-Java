@@ -29,24 +29,45 @@ public abstract class ImportWriter extends NodeWriter
 		if (!node().isPackageImport() && node().getClassDeclaration().getFileDeclaration() == node().getFileDeclaration()) {
 			return builder;
 		}
-		
-		return super.write(builder);
-	}
-	
-	@Override
-	public StringBuilder writeExpression(StringBuilder builder, Accessible stopAt)
-	{
+
+		if (node().isStatic || node().getClassDeclaration() instanceof ExtensionDeclaration) {
+			writeStaticImport(builder);
+		}
+
 		builder.append("import ");
 
-		boolean staticImport = node().isStatic || node().getClassDeclaration() instanceof ExtensionDeclaration;
-
-		if (staticImport) {
-			builder.append("static ");
-		}
-
 		if (node().isPackageImport()) {
-			return builder.append(node().location.replace('/', '.')).append(".*");
+			return builder.append(node().location.replace('/', '.')).append(".*;\n");
 		}
+
+		String components = String.join(".", node().location.substring(0, Math.max(0, node().location.lastIndexOf('/'))).split("[/]"));
+		builder.append(components);
+
+		if (components.length() > 0) {
+			builder.append('.');
+		}
+
+		ClassDeclaration c = node().getClassDeclaration();
+		ClassDeclaration encapsulating = c.encapsulatingClass;
+
+		StringBuilder prefix = new StringBuilder();
+
+		while (encapsulating != null) {
+			prefix.insert(0, getWriter(encapsulating).writeName().append("."));
+
+			encapsulating = encapsulating.encapsulatingClass;
+		}
+
+		builder.append(prefix);
+
+		getWriter(c).writeName(builder).append(";\n");
+		
+		return builder;
+	}
+
+	public StringBuilder writeStaticImport(StringBuilder builder)
+	{
+		builder.append("import static ");
 
 		String components = String.join(".", node().location.substring(0, Math.max(0, node().location.lastIndexOf('/'))).split("[/]"));
 		builder.append(components);
@@ -70,10 +91,6 @@ public abstract class ImportWriter extends NodeWriter
 
 		getWriter(c).writeName(builder);
 
-		if (staticImport) {
-			builder.append(".*");
-		}
-
-		return builder;
+		return builder.append(".*;\n");
 	}
 }
