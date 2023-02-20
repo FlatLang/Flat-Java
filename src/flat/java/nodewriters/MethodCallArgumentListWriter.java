@@ -42,7 +42,11 @@ public abstract class MethodCallArgumentListWriter extends ArgumentListWriter
 					getWriter((Identifier) values[i]).writeOptionalName(builder);
 				} else {
 					if (optional) {
-						builder.append("Optional.ofNullable(");
+						if (values[i].isPrimitive()) {
+							builder.append("Optional.of(");
+						} else {
+							builder.append("Optional.ofNullable(");
+						}
 					}
 
 					String cast = null;
