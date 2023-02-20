@@ -60,7 +60,6 @@ public abstract class IdentifierWriter extends ValueWriter implements Accessible
             builder.append("FlatUtilities.chain(");
             writeUntil(builder, chainPath.to).append(", _cr -> _cr.");
             return getWriter(chainPath.to.toValue()).writeExpression(builder, stopAt).append(')');
-//            return writeAccessedExpression(builder, stopAt, false).append(")");
         }
         if (extensionPath != null) {
             if (extensionPath.to != stopAt) {
