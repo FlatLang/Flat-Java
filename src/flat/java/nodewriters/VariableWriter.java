@@ -8,7 +8,9 @@ public abstract class VariableWriter extends IdentifierWriter
 	public abstract Variable node();
 
 	public boolean isExtensionDeclaration() {
-		return node().declaration instanceof ExtensionMethodDeclaration || node().declaration instanceof ExtensionFieldDeclaration;
+		return node().declaration instanceof ExtensionMethodDeclaration ||
+			node().declaration instanceof ExtensionFieldDeclaration ||
+			node().declaration instanceof PropertyMethod && getWriter((PropertyMethod)node().declaration).isExtension();
 	}
 
 	public boolean requiresLambdaWrapperClass() {

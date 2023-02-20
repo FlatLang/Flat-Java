@@ -1,14 +1,23 @@
 package flat.java.nodewriters;
 
+import flat.Flat;
 import flat.tree.*;
 
 public abstract class PropertyMethodWriter extends BodyMethodDeclarationWriter
 {
 	public abstract PropertyMethod node();
 
+	public boolean isExtension() {
+		if (node().getParentClass() instanceof ExtensionDeclaration == false) return false;
+		if (node().originalField == null) return false;
+		if (node().originalField instanceof ExtensionFieldDeclaration == false) return false;
+
+		return true;
+	}
+
 	@Override
 	public StringBuilder writeStatic(StringBuilder builder) {
-		if (node().getParentClass() instanceof ExtensionDeclaration) {
+		if (isExtension()) {
 			return builder.append("static ");
 		}
 
@@ -21,7 +30,7 @@ public abstract class PropertyMethodWriter extends BodyMethodDeclarationWriter
 			builder.append('(');
 		}
 
-		if (node().getParentClass() instanceof ExtensionDeclaration) {
+		if (isExtension()) {
 			writeExtensionReferenceParameter(builder);
 		}
 
