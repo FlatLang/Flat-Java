@@ -51,8 +51,19 @@ public abstract class MethodCallArgumentListWriter extends ArgumentListWriter
 
 					String cast = null;
 
-					if (parameter != null && parameter.isPrimitive()) {
+					if (
+						parameter != null &&
+							parameter instanceof ClosureDeclaration == false &&
+							parameter.isPrimitive() &&
+							values[i].getType() != null
+					) {
 						switch (parameter.getType()) {
+							case "Long":
+								cast = "(long)";
+								break;
+							case "Int":
+								cast = "(int)";
+								break;
 							case "Short":
 								cast = "(short)";
 								break;
