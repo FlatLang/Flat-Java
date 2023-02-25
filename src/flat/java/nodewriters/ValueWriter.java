@@ -130,10 +130,10 @@ public abstract class ValueWriter extends NodeWriter
 				if (param != null) {
 					builder.append(param.getDefaultType());
 				} else {
-					builder.append("BLOOP");
+					builder.append("BLOOP1");
 				}
 			} else {
-				builder.append("BLOOP");
+				builder.append("BLOOP2");
 			}
 		} else {
 			getWriter(node().getTypeClass()).writeName(builder);
