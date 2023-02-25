@@ -1,8 +1,6 @@
 package flat.java.nodewriters;
 
 import flat.tree.Accessible;
-import flat.tree.MethodCall;
-import flat.tree.generics.GenericTypeArgument;
 import flat.tree.generics.GenericTypeParameter;
 
 public abstract class GenericTypeParameterWriter extends ValueWriter
