@@ -87,8 +87,12 @@ public abstract class ValueWriter extends NodeWriter
 		return builder;
 	}
 
-	public StringBuilder writeTypeName(StringBuilder builder) {
-		return writeTypeName(builder, true, node().isPrimitiveType() && node().isPrimitive(), null);
+	public final StringBuilder writeTypeName(StringBuilder builder) {
+		return writeTypeName(builder, true);
+	}
+
+	public final StringBuilder writeTypeName(StringBuilder builder, boolean convertPrimitive) {
+		return writeTypeName(builder, convertPrimitive, node().isPrimitiveType() && node().isPrimitive(), null);
 	}
 
 	public StringBuilder writeTypeName(StringBuilder builder, boolean convertPrimitive, boolean boxPrimitive, Value context) {
