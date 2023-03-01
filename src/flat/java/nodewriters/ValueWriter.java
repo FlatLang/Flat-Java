@@ -2,6 +2,7 @@ package flat.java.nodewriters;
 
 import flat.tree.ClassDeclaration;
 import flat.tree.FlatMethodDeclaration;
+import flat.tree.FunctionType;
 import flat.tree.Value;
 import flat.tree.generics.GenericTypeArgument;
 import flat.tree.generics.GenericTypeArgumentList;
@@ -75,6 +76,10 @@ public abstract class ValueWriter extends NodeWriter
 
 	public StringBuilder writeType(StringBuilder builder, boolean space, boolean convertPrimitive, boolean boxPrimitive, Value context, boolean  writeGenerics, boolean  writeArray)
 	{
+		if (node().isFunctionType()) {
+			return getWriter(((FunctionType)node().getTypeObject()).closure).writeType(builder, space, true, true, context);
+		}
+
 		writeTypeName(builder, convertPrimitive, boxPrimitive, context);
 		if (writeGenerics) writeGenericArguments(builder, context);
 		if (writeArray) writeArrayDimensions(builder);
