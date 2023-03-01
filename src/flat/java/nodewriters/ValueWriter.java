@@ -184,7 +184,7 @@ public abstract class ValueWriter extends NodeWriter
 			for (; i < args.getNumVisibleChildren(); i++) {
 				if (i > 0) builder.append(", ");
 
-				getWriter(args.getVisibleChild(i)).writeExpression(builder, null, context);
+				writeGenericTypeArgument(builder, context, args.getVisibleChild(i));
 			}
 
 			builder.append(">");
@@ -209,6 +209,10 @@ public abstract class ValueWriter extends NodeWriter
 		}
 
 		return builder;
+	}
+
+	public StringBuilder writeGenericTypeArgument(StringBuilder builder, Value context, GenericTypeArgument arg) {
+		return getWriter(arg).writeExpression(builder, null, context);
 	}
 
 	private StringBuilder writePrimitiveType(StringBuilder builder, boolean convertPrimitive, boolean boxPrimitive) {
