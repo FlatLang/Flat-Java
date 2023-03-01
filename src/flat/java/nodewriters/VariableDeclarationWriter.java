@@ -64,11 +64,13 @@ public abstract class VariableDeclarationWriter extends IIdentifierWriter
 		boolean convertPrimitive,
 		boolean boxPrimitive,
 		Value context,
+		boolean writeGenerics,
+		boolean writeArray,
 		boolean checkLambdaWrapperClass
 	) {
 		if (checkLambdaWrapperClass && requiresLambdaWrapperClass()) {
 			builder.append("java.util.concurrent.atomic.AtomicReference<");
-			super.writeType(builder, false, convertPrimitive, true, context);
+			super.writeType(builder, false, convertPrimitive, true, context, writeGenerics, writeArray);
 			builder.append('>');
 
 			if (space) {
@@ -78,7 +80,7 @@ public abstract class VariableDeclarationWriter extends IIdentifierWriter
 			return builder;
 		}
 
-		return super.writeType(builder, space, convertPrimitive, boxPrimitive, context);
+		return super.writeType(builder, space, convertPrimitive, boxPrimitive, context, writeGenerics, writeArray);
 	}
 
 	public final StringBuilder writeSignature()
@@ -95,7 +97,7 @@ public abstract class VariableDeclarationWriter extends IIdentifierWriter
 	}
 
 	public StringBuilder writeSignature(StringBuilder builder, Value context, String name) {
-		writeType(builder, true, true, false, context, true);
+		writeType(builder, true, true, false, context, true, true,  true);
 		return writeName(builder, name);
 	}
 

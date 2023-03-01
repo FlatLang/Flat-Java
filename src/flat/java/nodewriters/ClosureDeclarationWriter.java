@@ -7,7 +7,7 @@ public abstract class ClosureDeclarationWriter extends ParameterWriter
 	public abstract ClosureDeclaration node();
 
 	@Override
-	public StringBuilder writeType(StringBuilder builder, boolean space, boolean convertPrimitive, boolean boxPrimitive, Value context) {
+	public StringBuilder writeType(StringBuilder builder, boolean space, boolean convertPrimitive, boolean boxPrimitive, Value context, boolean writeGenerics, boolean writeArray) {
 		if (node().getType() == null)
 		{
 			builder.append("FlatUtilities.Consumer");
@@ -29,7 +29,7 @@ public abstract class ClosureDeclarationWriter extends ParameterWriter
 					builder.append(", ");
 				}
 
-				super.writeType(builder, false, convertPrimitive, true, context);
+				super.writeType(builder, false, convertPrimitive, true, context, writeGenerics, writeArray);
 			}
 
 			builder.append(">");

@@ -65,11 +65,19 @@ public abstract class ValueWriter extends NodeWriter
 		return writeType(builder, space, convertPrimitive, boxPrimitive, null);
 	}
 
-	public StringBuilder writeType(StringBuilder builder, boolean space, boolean convertPrimitive, boolean boxPrimitive, Value context)
+	public final StringBuilder writeType(StringBuilder builder, boolean space, boolean convertPrimitive, boolean boxPrimitive, Value context) {
+		return writeType(builder, space, convertPrimitive, boxPrimitive, context, true);
+	}
+
+	public final StringBuilder writeType(StringBuilder builder, boolean space, boolean convertPrimitive, boolean boxPrimitive, Value context, boolean writeGenerics) {
+		return writeType(builder, space, convertPrimitive, boxPrimitive, context, writeGenerics, true);
+	}
+
+	public StringBuilder writeType(StringBuilder builder, boolean space, boolean convertPrimitive, boolean boxPrimitive, Value context, boolean  writeGenerics, boolean  writeArray)
 	{
 		writeTypeName(builder, convertPrimitive, boxPrimitive, context);
-		writeGenericArguments(builder, context);
-		writeArrayDimensions(builder);
+		if (writeGenerics) writeGenericArguments(builder, context);
+		if (writeArray) writeArrayDimensions(builder);
 		
 		if (space)
 		{

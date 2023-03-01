@@ -8,14 +8,14 @@ public abstract class GenericTypeArgumentWriter extends IIdentifierWriter
     public abstract GenericTypeArgument node();
 
     @Override
-    public StringBuilder writeType(StringBuilder builder, boolean space, boolean convertPrimitive, boolean boxPrimitive, Value context) {
+    public StringBuilder writeType(StringBuilder builder, boolean space, boolean convertPrimitive, boolean boxPrimitive, Value context, boolean writeGenerics, boolean writeArray) {
         if (node().getTypeObject() instanceof FunctionType) {
             FirstClassClosureDeclaration closure = ((FunctionType) node().getTypeObject()).closure;
 
-            return getWriter(closure).writeType(builder, space, true, boxPrimitive, context);
+            return getWriter(closure).writeType(builder, space, true, boxPrimitive, context, writeGenerics, writeArray);
         }
 
-        return super.writeType(builder, space, convertPrimitive, boxPrimitive, context);
+        return super.writeType(builder, space, convertPrimitive, boxPrimitive, context, writeGenerics, writeArray);
     }
 
     @Override

@@ -58,16 +58,16 @@ public abstract class FlatMethodDeclarationWriter extends MethodDeclarationWrite
 	}
 
 	@Override
-	public StringBuilder writeType(StringBuilder builder, boolean space, boolean convertPrimitive, boolean boxPrimitive, Value context) {
+	public StringBuilder writeType(StringBuilder builder, boolean space, boolean convertPrimitive, boolean boxPrimitive, Value context, boolean writeGenerics, boolean writeArray) {
 		if (node().doesOverride()) {
 			if (node().getOverriddenMethod().isPrimitive()) {
-				return getWriter(node().getRootDeclaration()).writeType(builder, space, convertPrimitive, boxPrimitive, context);
+				return getWriter(node().getRootDeclaration()).writeType(builder, space, convertPrimitive, boxPrimitive, context, writeGenerics, writeArray);
 			}
 
-			return super.writeType(builder, space, false, true, context);
+			return super.writeType(builder, space, false, true, context, writeGenerics, writeArray);
 		}
 
-		return super.writeType(builder, space, convertPrimitive, boxPrimitive, context);
+		return super.writeType(builder, space, convertPrimitive, boxPrimitive, context, writeGenerics, writeArray);
 	}
 
 	public StringBuilder writeGenericTypeParameters(StringBuilder builder) {

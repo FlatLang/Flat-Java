@@ -20,7 +20,7 @@ public abstract class InstantiationWriter extends IIdentifierWriter
 	}
 
 	@Override
-	public StringBuilder writeType(StringBuilder builder, boolean space, boolean convertPrimitive, boolean boxPrimitive, Value context) {
-		return super.writeType(builder, space, false, true, context);
+	public StringBuilder writeType(StringBuilder builder, boolean space, boolean convertPrimitive, boolean boxPrimitive, Value context, boolean writeGenerics, boolean writeArray) {
+		return super.writeType(builder, space, false, true, context, writeGenerics, writeArray);
 	}
 }

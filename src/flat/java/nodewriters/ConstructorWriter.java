@@ -12,7 +12,7 @@ public abstract class ConstructorWriter extends BodyMethodDeclarationWriter
 	}
 
 	@Override
-	public StringBuilder writeType(StringBuilder builder, boolean space, boolean convertPrimitive, boolean boxPrimitive, Value context)
+	public StringBuilder writeType(StringBuilder builder, boolean space, boolean convertPrimitive, boolean boxPrimitive, Value context, boolean writeGenerics, boolean writeArray)
 	{
 		return builder;
 	}

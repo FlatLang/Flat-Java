@@ -52,8 +52,8 @@ public abstract class VariableWriter extends IdentifierWriter
 	}
 
 	@Override
-	public StringBuilder writeType(StringBuilder builder, boolean space, boolean convertPrimitive, boolean boxPrimitive, Value context) {
-		StringBuilder type = getWriter(node().getDeclaration()).writeType(new StringBuilder(), space, convertPrimitive, boxPrimitive, context);
+	public StringBuilder writeType(StringBuilder builder, boolean space, boolean convertPrimitive, boolean boxPrimitive, Value context, boolean writeGenerics, boolean writeArray) {
+		StringBuilder type = getWriter(node().getDeclaration()).writeType(new StringBuilder(), space, convertPrimitive, boxPrimitive, context, writeGenerics, writeArray);
 
 		for (int i = 0; i < node().getArrayAccessDimensions(); i++) {
 			type.delete(type.length() - 2, type.length());

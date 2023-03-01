@@ -123,7 +123,7 @@ public abstract class ClassDeclarationWriter extends InstanceDeclarationWriter
 	}
 
 	@Override
-	public StringBuilder writeType(StringBuilder builder, boolean space, boolean convertPrimitive, boolean boxPrimitive, Value context)
+	public StringBuilder writeType(StringBuilder builder, boolean space, boolean convertPrimitive, boolean boxPrimitive, Value context, boolean writeGenerics, boolean writeArray)
 	{
 		return builder.append("class").append(space ? ' ' : "");
 	}

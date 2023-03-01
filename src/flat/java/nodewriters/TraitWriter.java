@@ -8,7 +8,7 @@ public abstract class TraitWriter extends ClassDeclarationWriter
 	public abstract Trait node();
 
 	@Override
-	public StringBuilder writeType(StringBuilder builder, boolean space, boolean convertPrimitive, boolean boxPrimitive, Value context)
+	public StringBuilder writeType(StringBuilder builder, boolean space, boolean convertPrimitive, boolean boxPrimitive, Value context, boolean writeGenerics, boolean writeArray)
 	{
 		return builder.append("interface").append(space ? ' ' : "");
 	}
