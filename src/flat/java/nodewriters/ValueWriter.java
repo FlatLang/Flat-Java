@@ -161,7 +161,7 @@ public abstract class ValueWriter extends NodeWriter
 		return writeTypeClassName(builder);
 	}
 
-	public StringBuilder writeGenericArguments(StringBuilder builder) {
+	public final StringBuilder writeGenericArguments(StringBuilder builder) {
 		return writeGenericArguments(builder, null);
 	}
 
