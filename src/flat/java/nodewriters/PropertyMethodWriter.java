@@ -42,4 +42,13 @@ public abstract class PropertyMethodWriter extends BodyMethodDeclarationWriter
 
 		return builder;
 	}
+
+	@Override
+	public StringBuilder writeGenericArguments(StringBuilder builder, Value context) {
+		if (node().originalField instanceof ClassInstanceDeclaration) {
+			return builder;
+		}
+
+		return super.writeGenericArguments(builder, context);
+	}
 }

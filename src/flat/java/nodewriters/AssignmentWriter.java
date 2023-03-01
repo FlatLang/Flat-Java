@@ -20,7 +20,13 @@ public abstract class AssignmentWriter extends ValueWriter
 
 		if (!leftTypeStr.equals(rightTypeStr)) {
 			cast += '(';
-			cast += leftTypeStr;
+
+			if (leftTypeStr.startsWith("FlatClass<")) {
+				cast += getWriter(leftType).writeType(new StringBuilder(), false, true, leftType.isPrimitiveType() && leftType.isPointer(), null, false);
+			} else {
+				cast += leftTypeStr;
+			}
+
 			cast += ')';
 		}
 
