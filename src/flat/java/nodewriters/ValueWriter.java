@@ -1,9 +1,7 @@
 package flat.java.nodewriters;
 
-import flat.tree.ClassDeclaration;
-import flat.tree.FlatMethodDeclaration;
-import flat.tree.FunctionType;
-import flat.tree.Value;
+import flat.Flat;
+import flat.tree.*;
 import flat.tree.generics.GenericTypeArgument;
 import flat.tree.generics.GenericTypeArgumentList;
 import flat.tree.generics.GenericTypeParameter;
@@ -147,10 +145,36 @@ public abstract class ValueWriter extends NodeWriter
 				if (param != null) {
 					builder.append(param.getDefaultType());
 				} else {
+					Flat.debuggingBreakpoint(true);
 					builder.append("BLOOP1");
+					builder.append("/*");
+					builder.append(node().getClass().getName());
+					builder.append("*/");
+				}
+			} else if (node() instanceof ClosureDeclaration) {
+				if (node().isGenericType()) {
+					builder.append(node().getType());
+				} else {
+					ClassDeclaration typeClass = node().getTypeClass();
+
+					if (typeClass != null) {
+						getWriter(node().getTypeClass()).writeName(builder);
+					} else {
+						Flat.debuggingBreakpoint(true);
+						builder.append("BLOOP1");
+						builder.append("/*");
+						builder.append(node().getType());
+						builder.append(':');
+						builder.append(node().getClass().getName());
+						builder.append("*/");
+					}
 				}
 			} else {
+				Flat.debuggingBreakpoint(true);
 				builder.append("BLOOP2");
+				builder.append("/*");
+				builder.append(node().getClass().getName());
+				builder.append("*/");
 			}
 		} else {
 			getWriter(node().getTypeClass()).writeName(builder);
@@ -174,10 +198,14 @@ public abstract class ValueWriter extends NodeWriter
 		return writeGenericArguments(builder, null);
 	}
 
+	public GenericTypeArgumentList getGenericTypeArgumentList() {
+		return node().getGenericTypeArgumentList();
+	}
+
 	public StringBuilder writeGenericArguments(StringBuilder builder, Value context) {
 		if (node().isGenericType()) return builder;
 
-		GenericTypeArgumentList args = node().getGenericTypeArgumentList();
+		GenericTypeArgumentList args = getGenericTypeArgumentList();
 
 		boolean printCaret = true;
 		int i = 0;
