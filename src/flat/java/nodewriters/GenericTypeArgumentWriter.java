@@ -45,9 +45,15 @@ public abstract class GenericTypeArgumentWriter extends IIdentifierWriter
     @Override
     public StringBuilder writeGenericType(StringBuilder builder, Value context) {
         if (context == null) {
-            return builder.append(node().getName());
+            return writeName(builder, node().getName());
         }
 
         return super.writeGenericType(builder, context);
+    }
+
+    @Override
+    public StringBuilder writeName(StringBuilder builder, String name) {
+        ClassDeclarationWriter.prependClassNamePrefix(builder, node().getName());
+        return super.writeName(builder, name);
     }
 }
