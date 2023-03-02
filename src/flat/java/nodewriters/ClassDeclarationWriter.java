@@ -132,17 +132,30 @@ public abstract class ClassDeclarationWriter extends InstanceDeclarationWriter
 	public StringBuilder writeName(StringBuilder builder, String name)
 	{
 		name = name != null ? name : node().getName();
-
-		for (String c : new String[]{"flat/Object", "flat/String", "flat/io/Console", "flat/datastruct/list/Array",
-			"flat/time/Date", "flat/math/Math", "flat/datastruct/Node", "flat/primitive/number/Int", "flat/primitive/number/Double",
-			"flat/primitive/number/Byte", "flat/primitive/number/Short", "flat/primitive/number/Long", "flat/primitive/number/Float",
-			"flat/meta/Class"}) {
-			if (node().getClassLocation().equals(c)) {
-				builder.append("Flat");
-				break;
-			}
-		}
+		
+		prependClassNamePrefix(builder, name);
 		
 		return super.writeName(builder, name);
+	}
+
+	public static StringBuilder prependClassNamePrefix(StringBuilder builder, String name) {
+		switch (name) {
+			case "Object":
+			case "String":
+			case "Console":
+			case "Array":
+			case "Date":
+			case "Math":
+			case "Node":
+			case "Int":
+			case "Double":
+			case "Byte":
+			case "Short":
+			case "Long":
+			case "Float":
+			case "Class": builder.append("Flat");
+		}
+		
+		return builder;
 	}
 }
