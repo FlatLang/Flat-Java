@@ -29,7 +29,17 @@ public abstract class ClosureWriter extends VariableWriter
 			for (int i = 0; i < params.getNumVisibleChildren(); i++) {
 				if (i > 0) builder.append(", ");
 
-				getWriter(params.getVisibleChild(i)).writeName(builder);
+				Parameter param = params.getVisibleChild(i);
+
+				if (param.isOptional()) {
+					builder.append("Optional.ofNullable(");
+				}
+
+				getWriter(param).writeName(builder);
+
+				if (param.isOptional()) {
+					builder.append(')');
+				}
 			}
 		}
 
