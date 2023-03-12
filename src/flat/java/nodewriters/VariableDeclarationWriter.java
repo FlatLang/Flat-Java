@@ -39,7 +39,6 @@ public abstract class VariableDeclarationWriter extends IIdentifierWriter
 				.flatMap(Node::getAncestorsStream)
 				.filter(n -> n instanceof Accessible)
 				.map(n -> (Accessible)n)
-//				.filter(Accessible::doesAccess)
 				.anyMatch(Accessible::isChainNavigation)) {
 			return true;
 		}
