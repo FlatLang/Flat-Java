@@ -5,8 +5,11 @@ import flat.tree.FlatMethodDeclaration;
 import flat.tree.Node;
 import flat.tree.Value;
 import flat.tree.lambda.LambdaMethodDeclaration;
+import flat.tree.variables.Variable;
 import flat.tree.variables.VariableDeclaration;
 
+import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public abstract class VariableDeclarationWriter extends IIdentifierWriter
@@ -22,9 +25,22 @@ public abstract class VariableDeclarationWriter extends IIdentifierWriter
 			? (LambdaMethodDeclaration) methodDeclaration
 			: null;
 
-		if (Stream.concat(node().references.stream(), node().closureVariableDeclarations.stream().flatMap(c -> c.references.stream()))
+		List<Variable> references = Stream.concat(
+				node().references.stream(),
+				node().closureVariableDeclarations.stream().flatMap(c -> c.references.stream())
+		).collect(Collectors.toList());
+
+		if (references.stream()
 			.map(Node::getParentMethod)
 			.anyMatch(method -> method != parentLambda && method instanceof LambdaMethodDeclaration)) {
+			return true;
+		}
+		if (references.stream()
+				.flatMap(Node::getAncestorsStream)
+				.filter(n -> n instanceof Accessible)
+				.map(n -> (Accessible)n)
+//				.filter(Accessible::doesAccess)
+				.anyMatch(Accessible::isChainNavigation)) {
 			return true;
 		}
 
