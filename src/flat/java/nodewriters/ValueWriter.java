@@ -90,6 +90,10 @@ public abstract class ValueWriter extends NodeWriter
 		return builder;
 	}
 
+	public final StringBuilder writeTypeName() {
+		return writeTypeName(new StringBuilder());
+	}
+
 	public final StringBuilder writeTypeName(StringBuilder builder) {
 		return writeTypeName(builder, true);
 	}
