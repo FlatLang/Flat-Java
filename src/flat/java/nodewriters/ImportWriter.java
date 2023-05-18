@@ -7,90 +7,91 @@ import flat.tree.Import;
 
 import static flat.java.engines.JavaCodeGeneratorEngine.isTestFile;
 
-public abstract class ImportWriter extends NodeWriter
-{
-	public abstract Import node();
-	
-	@Override
-	public StringBuilder write(StringBuilder builder)
-	{
-		if (node().getClassDeclaration() != null &&
-			node().getClassDeclaration().getFileDeclaration() != null &&
-			!isTestFile(node().getFileDeclaration().file) &&
-			isTestFile(node().getClassDeclaration().getFileDeclaration().file)) {
-			return builder;
-		}
-		if (node().isExternal()) {
-			return builder;
-		}
-		if (!node().isPackageImport() && node().getClassDeclaration() == null) {
-			return builder;
-		}
-		if (!node().isPackageImport() && node().getClassDeclaration().getFileDeclaration() == node().getFileDeclaration()) {
-			return builder;
-		}
+public abstract class ImportWriter extends NodeWriter {
+    public abstract Import node();
 
-		if (node().isStatic || node().getClassDeclaration() instanceof ExtensionDeclaration) {
-			writeStaticImport(builder);
-		}
+    @Override
+    public StringBuilder write(StringBuilder builder) {
+        if (node().getClassDeclaration() != null &&
+            node().getClassDeclaration().getFileDeclaration() != null &&
+            !isTestFile(node().getFileDeclaration().file) &&
+            isTestFile(node().getClassDeclaration().getFileDeclaration().file)) {
+            return builder;
+        }
+        if (node().isExternal()) {
+            return builder;
+        }
+        if (!node().isPackageImport() && node().getClassDeclaration() == null) {
+            return builder;
+        }
+        if (!node().isPackageImport()
+            && node().getClassDeclaration().getFileDeclaration() == node().getFileDeclaration()) {
+            return builder;
+        }
 
-		builder.append("import ");
+        if (node().isStatic || node().getClassDeclaration() instanceof ExtensionDeclaration) {
+            writeStaticImport(builder);
+        }
 
-		if (node().isPackageImport()) {
-			return builder.append(node().location.replace('/', '.')).append(".*;\n");
-		}
+        builder.append("import ");
 
-		String components = String.join(".", node().location.substring(0, Math.max(0, node().location.lastIndexOf('/'))).split("[/]"));
-		builder.append(components);
+        if (node().isPackageImport()) {
+            return builder.append(node().location.replace('/', '.')).append(".*;\n");
+        }
 
-		if (components.length() > 0) {
-			builder.append('.');
-		}
+        String components = String.join(".", node().location
+            .substring(0, Math.max(0, node().location.lastIndexOf('/'))).split("[/]"));
+        builder.append(components);
 
-		ClassDeclaration c = node().getClassDeclaration();
-		ClassDeclaration encapsulating = c.encapsulatingClass;
+        if (components.length() > 0) {
+            builder.append('.');
+        }
 
-		StringBuilder prefix = new StringBuilder();
+        ClassDeclaration c = node().getClassDeclaration();
+        ClassDeclaration encapsulating = c.encapsulatingClass;
 
-		while (encapsulating != null) {
-			prefix.insert(0, getWriter(encapsulating).writeName().append("."));
+        StringBuilder prefix = new StringBuilder();
 
-			encapsulating = encapsulating.encapsulatingClass;
-		}
+        while (encapsulating != null) {
+            prefix.insert(0, getWriter(encapsulating).writeName().append("."));
 
-		builder.append(prefix);
+            encapsulating = encapsulating.encapsulatingClass;
+        }
 
-		getWriter(c).writeName(builder).append(";\n");
-		
-		return builder;
-	}
+        builder.append(prefix);
 
-	public StringBuilder writeStaticImport(StringBuilder builder)
-	{
-		builder.append("import static ");
+        getWriter(c).writeName(builder).append(";\n");
 
-		String components = String.join(".", node().location.substring(0, Math.max(0, node().location.lastIndexOf('/'))).split("[/]"));
-		builder.append(components);
+        return builder;
+    }
 
-		if (components.length() > 0) {
-			builder.append('.');
-		}
+    public StringBuilder writeStaticImport(StringBuilder builder) {
+        builder.append("import static ");
 
-		ClassDeclaration c = node().getClassDeclaration();
-		ClassDeclaration encapsulating = c.encapsulatingClass;
+        String components = String.join(".", node().location
+            .substring(0, Math.max(0, node().location.lastIndexOf('/'))).split("[/]"));
+        builder.append(components);
 
-		StringBuilder prefix = new StringBuilder();
+        if (components.length() > 0) {
+            builder.append('.');
+        }
 
-		while (encapsulating != null) {
-			prefix.insert(0, getWriter(encapsulating).writeName().append("."));
+        ClassDeclaration c = node().getClassDeclaration();
+        ClassDeclaration encapsulating = c.encapsulatingClass;
 
-			encapsulating = encapsulating.encapsulatingClass;
-		}
+        StringBuilder prefix = new StringBuilder();
 
-		builder.append(prefix);
+        while (encapsulating != null) {
+            prefix.insert(0, getWriter(encapsulating).writeName().append("."));
 
-		getWriter(c).writeName(builder);
+            encapsulating = encapsulating.encapsulatingClass;
+        }
 
-		return builder.append(".*;\n");
-	}
+        builder.append(prefix);
+
+        getWriter(c).writeName(builder);
+
+        return builder.append(".*;\n");
+    }
 }
+

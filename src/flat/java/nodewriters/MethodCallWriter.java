@@ -3,115 +3,114 @@ package flat.java.nodewriters;
 import flat.tree.*;
 import flat.tree.generics.GenericTypeArgumentList;
 
-public abstract class MethodCallWriter extends VariableWriter
-{
-	public abstract MethodCall node();
-	
-	@Override
-	public StringBuilder writeName(StringBuilder builder, String name)
-	{
-		if (node().isSuperCall()) {
-			return builder.append("super");
-		}
+public abstract class MethodCallWriter extends VariableWriter {
+    public abstract MethodCall node();
 
-		if (node().getCallableDeclaration() instanceof FlatMethodDeclaration) {
-			boolean appendStatic = node().isWithinStaticContext() || node().isAccessedWithinStaticContext();
+    @Override
+    public StringBuilder writeName(StringBuilder builder, String name) {
+        if (node().isSuperCall()) {
+            return builder.append("super");
+        }
 
-			return getWriter((FlatMethodDeclaration)node().getCallableDeclaration()).writeName(builder, name, appendStatic);
-		} else if (node().getCallableDeclaration() instanceof MethodDeclaration) {
-			return getWriter((MethodDeclaration)node().getCallableDeclaration()).writeName(builder, name);
-		}
-		
-		return super.writeName(builder, name);
-	}
+        if (node().getCallableDeclaration() instanceof FlatMethodDeclaration) {
+            boolean appendStatic =
+                node().isWithinStaticContext() || node().isAccessedWithinStaticContext();
 
-	@Override
-	public GenericTypeArgumentList getGenericTypeArgumentList() {
-		return node().getMethodGenericTypeArgumentList();
-	}
+            return getWriter((FlatMethodDeclaration) node().getCallableDeclaration())
+                .writeName(builder, name, appendStatic);
+        } else if (node().getCallableDeclaration() instanceof MethodDeclaration) {
+            return getWriter((MethodDeclaration) node().getCallableDeclaration()).writeName(builder,
+                name);
+        }
 
-	@Override
-	public StringBuilder writeExtensionReferenceAccess(StringBuilder builder) {
-		if (node().declaration instanceof AnonymousCompilerMethod) return builder;
+        return super.writeName(builder, name);
+    }
 
-		return super.writeExtensionReferenceAccess(builder);
-	}
+    @Override
+    public GenericTypeArgumentList getGenericTypeArgumentList() {
+        return node().getMethodGenericTypeArgumentList();
+    }
 
-	@Override
-	public StringBuilder writeGenericArguments(StringBuilder builder, Value context) {
-		if (getGenericTypeArgumentList().getChildTypeStream().anyMatch(a -> !a.autoAdded)) {
-			return super.writeGenericArguments(builder, context);
-		}
+    @Override
+    public StringBuilder writeExtensionReferenceAccess(StringBuilder builder) {
+        if (node().declaration instanceof AnonymousCompilerMethod)
+            return builder;
 
-		return builder;
-	}
+        return super.writeExtensionReferenceAccess(builder);
+    }
 
-	@Override
-	public StringBuilder writeUseExpression(StringBuilder builder)
-	{
-		if (isExtensionDeclaration()) {
-			return writeExtensionUseExpression(builder, node());
-		}
+    @Override
+    public StringBuilder writeGenericArguments(StringBuilder builder, Value context) {
+        if (getGenericTypeArgumentList().getChildTypeStream().anyMatch(a -> !a.autoAdded)) {
+            return super.writeGenericArguments(builder, context);
+        }
 
-		StringBuilder prefix = new StringBuilder();
+        return builder;
+    }
 
-		writeExtensionReferenceAccess(prefix);
+    @Override
+    public StringBuilder writeUseExpression(StringBuilder builder) {
+        if (isExtensionDeclaration()) {
+            return writeExtensionUseExpression(builder, node());
+        }
 
-		StringBuilder genericArgs = node().getCallableDeclaration() instanceof ClosureDeclaration
-			? new StringBuilder()
-			: writeGenericArguments(new StringBuilder());
+        StringBuilder prefix = new StringBuilder();
 
-		builder.append(prefix);
+        writeExtensionReferenceAccess(prefix);
 
-		if (
-			genericArgs.length() > 0 &&
-				node().declaration instanceof Constructor == false &&
-				!node().isAccessed() &&
-				prefix.length() == 0
-		) {
-			if (node().isAccessedWithinStaticContext()) {
-				getWriter((Identifier) node().getReferenceTypeNode()).writeName(builder);
-			} else {
-				builder.append("this");
-			}
+        StringBuilder genericArgs = node().getCallableDeclaration() instanceof ClosureDeclaration
+            ? new StringBuilder()
+            : writeGenericArguments(new StringBuilder());
 
-			builder.append('.');
+        builder.append(prefix);
 
-			builder.append(genericArgs);
-		}
+        if (genericArgs.length() > 0 &&
+            node().declaration instanceof Constructor == false &&
+            !node().isAccessed() &&
+            prefix.length() == 0) {
+            if (node().isAccessedWithinStaticContext()) {
+                getWriter((Identifier) node().getReferenceTypeNode()).writeName(builder);
+            } else {
+                builder.append("this");
+            }
 
-		writeName(builder);
+            builder.append('.');
 
-		if (genericArgs.length() > 0 && node().declaration instanceof Constructor) {
-			builder.append(genericArgs);
-		}
+            builder.append(genericArgs);
+        }
 
-		if (node().getCallableDeclaration() instanceof ClosureDeclaration)
-		{
-			builder.append(".call");
-		}
-		
-		return getWriter(node().getArgumentList()).write(builder);
-	}
+        writeName(builder);
 
-	@Override
-	public StringBuilder writeExtensionUseExpression(StringBuilder builder, Identifier start) {
-		writeName(builder).append('(');
+        if (genericArgs.length() > 0 && node().declaration instanceof Constructor) {
+            builder.append(genericArgs);
+        }
 
-		if (node() == start) {
-			builder.append("_this");
-		} else {
-			getWriter(start).writeExpression(builder, node());
-		}
+        if (node().getCallableDeclaration() instanceof ClosureDeclaration) {
+            builder.append(".call");
+        }
 
-		StringBuilder args = getWriter(node().getArgumentList()).write(new StringBuilder(), false);
+        return getWriter(node().getArgumentList()).write(builder);
+    }
 
-		if (args.length() > 0) {
-			builder.append(", ").append(args);
-		}
+    @Override
+    public StringBuilder writeExtensionUseExpression(StringBuilder builder, Identifier start) {
+        writeName(builder).append('(');
 
-		builder.append(')');
+        if (node() == start) {
+            builder.append("_this");
+        } else {
+            getWriter(start).writeExpression(builder, node());
+        }
 
-		return writeAccessedExpression(builder);
-	}
+        StringBuilder args = getWriter(node().getArgumentList()).write(new StringBuilder(), false);
+
+        if (args.length() > 0) {
+            builder.append(", ").append(args);
+        }
+
+        builder.append(')');
+
+        return writeAccessedExpression(builder);
+    }
 }
+

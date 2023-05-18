@@ -3,34 +3,32 @@ package flat.java.nodewriters;
 import flat.tree.Accessible;
 import flat.tree.variables.Array;
 
-public abstract class ArrayWriter extends VariableDeclarationWriter
-{
-	public abstract Array node();
-	
-	@Override
-	public StringBuilder writeUseExpression(StringBuilder builder)
-	{
-		if (node().isGenericType()) {
-			getWriter(node().getGenericTypeParameter()).writeDefaultType(builder);
-			return writeArrayDimensions(builder);
-		}
+public abstract class ArrayWriter extends VariableDeclarationWriter {
+    public abstract Array node();
 
-		writeTypeName(builder);
-		writeArrayDimensions(builder);
+    @Override
+    public StringBuilder writeUseExpression(StringBuilder builder) {
+        if (node().isGenericType()) {
+            getWriter(node().getGenericTypeParameter()).writeDefaultType(builder);
+            return writeArrayDimensions(builder);
+        }
 
-		return builder;
-	}
+        writeTypeName(builder);
+        writeArrayDimensions(builder);
 
-	@Override
-	public StringBuilder writeExpression(StringBuilder builder, Accessible stopAt) {
-		builder.append("new ");
+        return builder;
+    }
 
-		return writeUseExpression(builder);
-	}
+    @Override
+    public StringBuilder writeExpression(StringBuilder builder, Accessible stopAt) {
+        builder.append("new ");
 
-	@Override
-	public StringBuilder writeArrayDimensions(StringBuilder builder)
-	{
-		return getWriter(node().getDimensions()).writeExpression(builder);
-	}
+        return writeUseExpression(builder);
+    }
+
+    @Override
+    public StringBuilder writeArrayDimensions(StringBuilder builder) {
+        return getWriter(node().getDimensions()).writeExpression(builder);
+    }
 }
+

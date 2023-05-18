@@ -2,29 +2,26 @@ package flat.java.nodewriters;
 
 import flat.tree.*;
 
-public abstract class ElseStatementWriter extends ControlStatementWriter
-{
-	public abstract ElseStatement node();
-	
-	@Override
-	public StringBuilder write(StringBuilder builder)
-	{
-		builder.append("else ");
+public abstract class ElseStatementWriter extends ControlStatementWriter {
+    public abstract ElseStatement node();
 
-		if (node().getNumChildren() == 2)
-		{
-			Node child = node().getChild(1);
+    @Override
+    public StringBuilder write(StringBuilder builder) {
+        builder.append("else ");
 
-			if (child instanceof IfStatement)
-			{
-				getWriter(child).writeExpression(builder).append(' ');
+        if (node().getNumChildren() == 2) {
+            Node child = node().getChild(1);
 
-				getWriter(child.getScope()).write(builder, true, false);
+            if (child instanceof IfStatement) {
+                getWriter(child).writeExpression(builder).append(' ');
 
-				return builder.append(node().getNextNode() instanceof ElseStatement ? ' ' : '\n');
-			}
-		}
+                getWriter(child.getScope()).write(builder, true, false);
 
-		return getWriter(node().getScope()).write(builder);
-	}
+                return builder.append(node().getNextNode() instanceof ElseStatement ? ' ' : '\n');
+            }
+        }
+
+        return getWriter(node().getScope()).write(builder);
+    }
 }
+

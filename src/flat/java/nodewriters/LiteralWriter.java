@@ -4,80 +4,80 @@ import flat.tree.*;
 
 import java.util.Objects;
 
-public abstract class LiteralWriter extends IValueWriter implements AccessibleWriter
-{
-	public abstract Literal node();
-	
-	@Override
-	public StringBuilder writeUseExpression(StringBuilder builder)
-	{
-		if (node().isStringInstantiation())
-		{
-			getWriter(node().getStringInstantiation()).writeExpression(builder);
-		} else {
-			builder.append(node().value);
+public abstract class LiteralWriter extends IValueWriter implements AccessibleWriter {
+    public abstract Literal node();
 
-			if (isFloat()) {
-				builder.append("f");
-			} else if (isLong() && !isInt()) {
-				builder.append("L");
-			}
-		}
-		
-		return writeArrayAccess(builder);
-	}
-	
-	@Override
-	public StringBuilder writeExpression(final StringBuilder builder, Accessible stopAt)
-	{
-		if (node() == stopAt) return builder;
+    @Override
+    public StringBuilder writeUseExpression(StringBuilder builder) {
+        if (node().isStringInstantiation()) {
+            getWriter(node().getStringInstantiation()).writeExpression(builder);
+        } else {
+            builder.append(node().value);
 
-		writeUseExpression(builder);
+            if (isFloat()) {
+                builder.append("f");
+            } else if (isLong() && !isInt()) {
+                builder.append("L");
+            }
+        }
 
-		return writeAccessedExpression(builder, stopAt);
-	}
+        return writeArrayAccess(builder);
+    }
 
-	public boolean isFloat() {
-		if (!isDouble()) return false;
+    @Override
+    public StringBuilder writeExpression(final StringBuilder builder, Accessible stopAt) {
+        if (node() == stopAt)
+            return builder;
 
-		try {
-			Float.valueOf(node().value);
+        writeUseExpression(builder);
 
-			return true;
-		} catch (NumberFormatException e) {
-			return false;
-		}
-	}
+        return writeAccessedExpression(builder, stopAt);
+    }
 
-	public boolean isDouble() {
-		if (!node().value.contains(".")) return false;
+    public boolean isFloat() {
+        if (!isDouble())
+            return false;
 
-		try {
-			Double.valueOf(node().value);
+        try {
+            Float.valueOf(node().value);
 
-			return true;
-		} catch (NumberFormatException e) {
-			return false;
-		}
-	}
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
 
-	public boolean isInt() {
-		try {
-			Integer.valueOf(node().value);
+    public boolean isDouble() {
+        if (!node().value.contains("."))
+            return false;
 
-			return true;
-		} catch (NumberFormatException e) {
-			return false;
-		}
-	}
+        try {
+            Double.valueOf(node().value);
 
-	public boolean isLong() {
-		try {
-			Long.valueOf(node().value);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
 
-			return true;
-		} catch (NumberFormatException e) {
-			return false;
-		}
-	}
+    public boolean isInt() {
+        try {
+            Integer.valueOf(node().value);
+
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+
+    public boolean isLong() {
+        try {
+            Long.valueOf(node().value);
+
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
 }
+

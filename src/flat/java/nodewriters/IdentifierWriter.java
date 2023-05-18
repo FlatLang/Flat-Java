@@ -43,7 +43,8 @@ public abstract class IdentifierWriter extends ValueWriter implements Accessible
 
     public StringBuilder writeExtensionUseExpression(StringBuilder builder, Identifier start) {
         throw new UnsupportedOperationException("should be a method call (" + node().getClass()
-            .getName() + "): " + node().getParentClass().getName() + "." + node().getParentMethod()
+            .getName() + "): " + node().getParentClass().getName() + "."
+            + node().getParentMethod()
                 .getName());
     }
 

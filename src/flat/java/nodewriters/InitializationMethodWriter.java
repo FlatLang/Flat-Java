@@ -2,27 +2,27 @@ package flat.java.nodewriters;
 
 import flat.tree.*;
 
-public abstract class InitializationMethodWriter extends BodyMethodDeclarationWriter
-{
-	public abstract InitializationMethod node();
-	
-	@Override
-	public StringBuilder writeName(StringBuilder builder, String name, boolean appendStatic)
-	{
-		builder.append("init_");
+public abstract class InitializationMethodWriter extends BodyMethodDeclarationWriter {
+    public abstract InitializationMethod node();
 
-		getWriter(node().getParentClass()).writeName(builder, name);
+    @Override
+    public StringBuilder writeName(StringBuilder builder, String name, boolean appendStatic) {
+        builder.append("init_");
 
-		return builder;
-	}
+        getWriter(node().getParentClass()).writeName(builder, name);
 
-	@Override
-	public StringBuilder writeStaticMethodInstanceOverload(StringBuilder builder) {
-		return builder;
-	}
+        return builder;
+    }
 
-	@Override
-	public StringBuilder writeType(StringBuilder builder, boolean space, boolean convertPrimitive, boolean boxPrimitive, Value context, boolean writeGenerics, boolean writeArray) {
-		return super.writeType(builder, space, false, true, context, writeGenerics, writeArray);
-	}
+    @Override
+    public StringBuilder writeStaticMethodInstanceOverload(StringBuilder builder) {
+        return builder;
+    }
+
+    @Override
+    public StringBuilder writeType(StringBuilder builder, boolean space, boolean convertPrimitive,
+        boolean boxPrimitive, Value context, boolean writeGenerics, boolean writeArray) {
+        return super.writeType(builder, space, false, true, context, writeGenerics, writeArray);
+    }
 }
+

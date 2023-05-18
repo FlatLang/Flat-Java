@@ -3,23 +3,26 @@ package flat.java.nodewriters;
 import flat.tree.*;
 import flat.tree.generics.GenericTypeArgument;
 
-public abstract class GenericTypeArgumentWriter extends IIdentifierWriter
-{
+public abstract class GenericTypeArgumentWriter extends IIdentifierWriter {
     public abstract GenericTypeArgument node();
 
     @Override
-    public StringBuilder writeType(StringBuilder builder, boolean space, boolean convertPrimitive, boolean boxPrimitive, Value context, boolean writeGenerics, boolean writeArray) {
+    public StringBuilder writeType(StringBuilder builder, boolean space, boolean convertPrimitive,
+        boolean boxPrimitive, Value context, boolean writeGenerics, boolean writeArray) {
         if (node().getTypeObject() instanceof FunctionType) {
             FirstClassClosureDeclaration closure = ((FunctionType) node().getTypeObject()).closure;
 
-            return getWriter(closure).writeType(builder, space, true, boxPrimitive, context, writeGenerics, writeArray);
+            return getWriter(closure).writeType(builder, space, true, boxPrimitive, context,
+                writeGenerics, writeArray);
         }
 
-        return super.writeType(builder, space, convertPrimitive, boxPrimitive, context, writeGenerics, writeArray);
+        return super.writeType(builder, space, convertPrimitive, boxPrimitive, context,
+            writeGenerics, writeArray);
     }
 
     @Override
-    public StringBuilder writeTypeName(StringBuilder builder, boolean convertPrimitive, boolean boxPrimitive, Value context) {
+    public StringBuilder writeTypeName(StringBuilder builder, boolean convertPrimitive,
+        boolean boxPrimitive, Value context) {
         ClassDeclaration c = node().getTypeClass();
 
         if (c == null) {
@@ -57,3 +60,4 @@ public abstract class GenericTypeArgumentWriter extends IIdentifierWriter
         return super.writeName(builder, name);
     }
 }
+

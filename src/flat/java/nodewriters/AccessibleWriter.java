@@ -5,68 +5,62 @@ import flat.tree.Value;
 
 import static flat.java.nodewriters.Writer.getWriter;
 
-public interface AccessibleWriter
-{
-	public abstract Accessible node();
-	
-	default StringBuilder writeAccessedExpression(StringBuilder builder)
-	{
-		return writeAccessedExpression(builder, null);
-	}
+public interface AccessibleWriter {
+    public abstract Accessible node();
 
-	default StringBuilder writeAccessedExpression(Accessible stopAt)
-	{
-		return writeAccessedExpression(new StringBuilder(), stopAt);
-	}
-	
-	default StringBuilder writeAccessedExpression(boolean dot, Accessible stopAt)
-	{
-		return writeAccessedExpression(new StringBuilder(), stopAt, dot);
-	}
-	
-	default StringBuilder writeAccessedExpression(StringBuilder builder, Accessible stopAt)
-	{
-		return writeAccessedExpression(builder, stopAt, true);
-	}
-	
-	default StringBuilder writeAccessedExpression(StringBuilder builder, Accessible stopAt, boolean dot)
-	{
-		if (node() == stopAt) return builder;
+    default StringBuilder writeAccessedExpression(StringBuilder builder) {
+        return writeAccessedExpression(builder, null);
+    }
 
-		if (node().doesAccess()) {
-			if (node().getAccessedNode() == stopAt) return builder;
+    default StringBuilder writeAccessedExpression(Accessible stopAt) {
+        return writeAccessedExpression(new StringBuilder(), stopAt);
+    }
 
-			if (dot) {
-				builder.append('.');
-			}
-			
-			getWriter(node().getAccessedNode()).writeExpression(builder, stopAt);
-		}
-		
-		return builder;
-	}
+    default StringBuilder writeAccessedExpression(boolean dot, Accessible stopAt) {
+        return writeAccessedExpression(new StringBuilder(), stopAt, dot);
+    }
 
-	default StringBuilder writeUntil(Accessible stopBefore)
-	{
-		return writeUntil(new StringBuilder(), stopBefore);
-	}
+    default StringBuilder writeAccessedExpression(StringBuilder builder, Accessible stopAt) {
+        return writeAccessedExpression(builder, stopAt, true);
+    }
 
-	default StringBuilder writeUntil(StringBuilder builder, Accessible stopBefore)
-	{
-		Value current = node().toValue();
+    default StringBuilder writeAccessedExpression(StringBuilder builder, Accessible stopAt,
+        boolean dot) {
+        if (node() == stopAt)
+            return builder;
 
-		while (current != null && current != stopBefore)
-		{
-			if (current != node())
-			{
-				builder.append('.');
-			}
+        if (node().doesAccess()) {
+            if (node().getAccessedNode() == stopAt)
+                return builder;
 
-			getWriter(current).writeUseExpression(builder);
+            if (dot) {
+                builder.append('.');
+            }
 
-			current = ((Accessible)current).getAccessedNode();
-		}
+            getWriter(node().getAccessedNode()).writeExpression(builder, stopAt);
+        }
 
-		return builder;
-	}
+        return builder;
+    }
+
+    default StringBuilder writeUntil(Accessible stopBefore) {
+        return writeUntil(new StringBuilder(), stopBefore);
+    }
+
+    default StringBuilder writeUntil(StringBuilder builder, Accessible stopBefore) {
+        Value current = node().toValue();
+
+        while (current != null && current != stopBefore) {
+            if (current != node()) {
+                builder.append('.');
+            }
+
+            getWriter(current).writeUseExpression(builder);
+
+            current = ((Accessible) current).getAccessedNode();
+        }
+
+        return builder;
+    }
 }
+
