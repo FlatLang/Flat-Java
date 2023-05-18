@@ -13,7 +13,7 @@ public abstract class IdentifierWriter extends ValueWriter implements Accessible
     public abstract Identifier node();
 
     public boolean isExtensionDeclaration() {
-        return node() instanceof Variable && getWriter((Variable)node()).isExtensionDeclaration();
+        return node() instanceof Variable && getWriter((Variable) node()).isExtensionDeclaration();
     }
 
     // FIXME: This needs to handle Accessibles as the path start
@@ -23,7 +23,7 @@ public abstract class IdentifierWriter extends ValueWriter implements Accessible
         return node().getAccessedNodes().stream()
             .peek(a -> count.incrementAndGet())
             .filter(a -> a instanceof Variable)
-            .map(a -> (Variable)a)
+            .map(a -> (Variable) a)
             .filter(v -> getWriter(v).isExtensionDeclaration())
             .findFirst()
             .map(variable -> new AccessorPath<>(node(), variable, count.get()))
@@ -42,28 +42,34 @@ public abstract class IdentifierWriter extends ValueWriter implements Accessible
     }
 
     public StringBuilder writeExtensionUseExpression(StringBuilder builder, Identifier start) {
-        throw new UnsupportedOperationException("should be a method call (" + node().getClass().getName() + "): " + node().getParentClass().getName() + "." + node().getParentMethod().getName());
+        throw new UnsupportedOperationException("should be a method call (" + node().getClass()
+            .getName() + "): " + node().getParentClass().getName() + "." + node().getParentMethod()
+                .getName());
     }
 
     @Override
     public StringBuilder writeExpression(StringBuilder builder, Accessible stopAt) {
-        if (node() == stopAt) return builder;
+        if (node() == stopAt)
+            return builder;
 
-        if (node() != node().getReturnedNode() && node().getReturnedNode() instanceof Closure && !node().isAccessed()) {
-            getWriter((Closure)node().getReturnedNode()).writeLambdaParams(builder);
+        if (node() != node().getReturnedNode() && node().getReturnedNode() instanceof Closure
+            && !node().isAccessed()) {
+            getWriter((Closure) node().getReturnedNode()).writeLambdaParams(builder);
         }
 
         AccessorPath<Identifier, Accessible> chainPath = getChainPath();
         AccessorPath<Identifier, Variable> extensionPath = getExtensionPath();
 
-        if ((!node().isAccessed() || node().isChainNavigation()) && chainPath != null && (extensionPath == null || extensionPath.distance > chainPath.distance)) {
+        if ((!node().isAccessed() || node().isChainNavigation()) && chainPath != null
+            && (extensionPath == null || extensionPath.distance > chainPath.distance)) {
             builder.append("FlatUtilities.chain(");
             writeUntil(builder, chainPath.to).append(", _cr -> _cr.");
             return getWriter(chainPath.to.toValue()).writeExpression(builder, stopAt).append(')');
         }
         if (extensionPath != null) {
             if (extensionPath.to != stopAt) {
-                return getWriter(extensionPath.to).writeExtensionUseExpression(builder, extensionPath.from);
+                return getWriter(extensionPath.to).writeExtensionUseExpression(builder,
+                    extensionPath.from);
             }
         }
 
@@ -74,9 +80,12 @@ public abstract class IdentifierWriter extends ValueWriter implements Accessible
     }
 
     public StringBuilder writeExtensionReferenceAccess(StringBuilder builder) {
-        if (node().getParentClass() instanceof ExtensionDeclaration == false) return builder;
-        if (node().getReferenceTypeNode() instanceof ObjectReference == false) return builder;
-        if (node().isAccessedWithinStaticContext()) return builder;
+        if (node().getParentClass() instanceof ExtensionDeclaration == false)
+            return builder;
+        if (node().getReferenceTypeNode() instanceof ObjectReference == false)
+            return builder;
+        if (node().isAccessedWithinStaticContext())
+            return builder;
 
         return builder.append("_this.");
     }
@@ -98,31 +107,38 @@ public abstract class IdentifierWriter extends ValueWriter implements Accessible
         name = name != null ? name : node().getName();
 
         switch (name) {
-            case "arguments": return builder.append("_java_arguments");
-            case "public": return builder.append("_java_public");
-            case "private": return builder.append("_java_private");
-            case "package": return builder.append("_java_package");
-            case "class": return builder.append("_java_class");
-            case "default": return builder.append("_java_default");
-            case "case": return builder.append("_java_case");
-            case "function": return builder.append("_java_function");
-            case "char": return builder.append("_java_char");
-            default: return builder.append(name);
+            case "arguments":
+                return builder.append("_java_arguments");
+            case "public":
+                return builder.append("_java_public");
+            case "private":
+                return builder.append("_java_private");
+            case "package":
+                return builder.append("_java_package");
+            case "class":
+                return builder.append("_java_class");
+            case "default":
+                return builder.append("_java_default");
+            case "case":
+                return builder.append("_java_case");
+            case "function":
+                return builder.append("_java_function");
+            case "char":
+                return builder.append("_java_char");
+            default:
+                return builder.append(name);
         }
     }
 
-    public final StringBuilder writeOptionalName()
-    {
+    public final StringBuilder writeOptionalName() {
         return writeOptionalName(new StringBuilder());
     }
 
-    public final StringBuilder writeOptionalName(StringBuilder builder)
-    {
+    public final StringBuilder writeOptionalName(StringBuilder builder) {
         return writeOptionalName(builder, null);
     }
 
-    public StringBuilder writeOptionalName(StringBuilder builder, String name)
-    {
+    public StringBuilder writeOptionalName(StringBuilder builder, String name) {
         return writeName(builder, name).append("_optional");
     }
 
